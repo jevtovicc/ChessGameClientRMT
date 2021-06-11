@@ -11,6 +11,7 @@ public class LoginWindow extends JFrame {
     private JTextField usernameTxtField;
 
     public LoginWindow() {
+        setTitle("Log in");
         setSize(500, 300);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -19,7 +20,7 @@ public class LoginWindow extends JFrame {
 
         JLabel usernameLabel = new JLabel("Enter username");
         usernameTxtField = new JTextField();
-        usernameTxtField.setColumns(20);
+        usernameTxtField.setColumns(10);
 
         pane.add(usernameLabel);
         pane.add(usernameTxtField);

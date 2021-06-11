@@ -27,7 +27,6 @@ public class Client {
             connectionSocket = new Socket(HOST_NAME, PORT);
             initializeIO();
 
-            // thread for reading keyboard input
             new Thread(new GUIController()).start();
 
             while (true) {
@@ -46,6 +45,24 @@ public class Client {
                     } else if (status.equals("NOT_UNIQUE")) {
                         GUIController.loginFail();
                     }
+                }
+
+                else if (messageFromServer.startsWith("OnlinePlayers")) {
+                    String[] parts = messageFromServer.split("@");
+                    if (parts.length > 1) {
+                        String username = parts[1];
+                        GUIController.addPlayerToList(username);
+                    }
+                }
+
+                if (messageFromServer.startsWith("NewOnlinePlayer")) {
+                    String username = messageFromServer.split("@")[1];
+                    GUIController.addPlayerToList(username);
+                }
+
+                if (messageFromServer.startsWith("PlayerDisconnected")) {
+                    String username = messageFromServer.split("@")[1];
+                    GUIController.removePlayerFromList(username);
                 }
             }
 
@@ -68,5 +85,7 @@ public class Client {
     public static void sendUsernameToServer(String username) {
         outputToServer.println("Username@" + username);
     }
+
+    public static void requestPlayersFromServer() { outputToServer.println("OnlinePlayers"); }
 
 }

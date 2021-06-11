@@ -1,5 +1,7 @@
 package gui;
 
+import client.Client;
+
 import javax.swing.*;
 
 public class GUIController implements Runnable{
@@ -26,6 +28,7 @@ public class GUIController implements Runnable{
     private static void showConnectingWindow() {
         loginWindow.setVisible(false);
         connectingWindow.setVisible(true);
+        Client.requestPlayersFromServer();
     }
 
     public static void loginSuccess() {
@@ -34,5 +37,13 @@ public class GUIController implements Runnable{
 
     public static void loginFail() {
         JOptionPane.showMessageDialog(null, "Username already exists. Please choose another one", "Username not unique", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void addPlayerToList(String playersUsernames) {
+        connectingWindow.setOnlinePlayersList(playersUsernames);
+    }
+
+    public static void removePlayerFromList(String username) {
+        connectingWindow.removePlayerFromList(username);
     }
 }
