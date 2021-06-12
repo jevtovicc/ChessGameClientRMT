@@ -1,5 +1,7 @@
 package gui;
 
+import client.Client;
+
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
@@ -8,6 +10,7 @@ public class ConnectingWindow extends JFrame {
 
     DefaultListModel dlm;
     JList<String> onlinePlayersList;
+    JButton btnSendRequest;
 
     public ConnectingWindow() {
         setTitle("Connect with others");
@@ -20,8 +23,18 @@ public class ConnectingWindow extends JFrame {
 
         dlm = new DefaultListModel();
         onlinePlayersList = new JList<>(dlm);
+        onlinePlayersList.addListSelectionListener(e -> {
+            btnSendRequest.setEnabled(!onlinePlayersList.isSelectionEmpty());
+        });
 
         pane.add(onlinePlayersList);
+
+        btnSendRequest = new JButton("Send request");
+        btnSendRequest.setEnabled(false);
+        btnSendRequest.addActionListener(e -> {
+            Client.sendGameRequest(onlinePlayersList.getSelectedValue());
+        });
+        pane.add(btnSendRequest);
 
         add(pane);
     }
@@ -32,5 +45,10 @@ public class ConnectingWindow extends JFrame {
         }
     }
 
-    public void removePlayerFromList(String username) { dlm.removeElement(username); }
+    public void removePlayerFromList(String username) {
+        dlm.removeElement(username);
+        if (dlm.size() == 0) {
+            btnSendRequest.setEnabled(false);
+        }
+    }
 }

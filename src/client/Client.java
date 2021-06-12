@@ -17,6 +17,8 @@ public class Client {
     static BufferedReader inputFromServer;
     static PrintStream outputToServer;
     static Socket connectionSocket;
+    static String username;
+    static String opponentUsername;
 
     public static void main(String[] args) {
 
@@ -40,9 +42,10 @@ public class Client {
 
                 if (messageFromServer.startsWith("Username")) {
                     String status = messageFromServer.split("@")[1];
-                    if (status.equals("OK")) {
+                    if (status.startsWith("OK")) {
+                        username = status.split(";")[1];
                         GUIController.loginSuccess();
-                    } else if (status.equals("NOT_UNIQUE")) {
+                    } else if (status.startsWith("NOT_UNIQUE")) {
                         GUIController.loginFail();
                     }
                 }
@@ -64,6 +67,27 @@ public class Client {
                     String username = messageFromServer.split("@")[1];
                     GUIController.removePlayerFromList(username);
                 }
+
+                if (messageFromServer.startsWith("GameRequest")) {
+                    String sender = messageFromServer.split("@")[1];
+                    // if request was accepted
+                    if (GUIController.showGameRequest(sender)) {
+                        opponentUsername = sender;
+                        acceptGameRequest();
+                    } else {
+                        rejectGameRequest(sender);
+                    }
+                }
+
+                if (messageFromServer.startsWith("InvitationAccept@")) {
+                    GUIController.showInvitationAccept(messageFromServer.split("@")[1]);
+                }
+
+                if (messageFromServer.startsWith("InvitationReject@")) {
+                    GUIController.showInvitationReject(messageFromServer.split("@")[1]);
+                }
+
+
             }
 
             connectionSocket.close();
@@ -88,4 +112,15 @@ public class Client {
 
     public static void requestPlayersFromServer() { outputToServer.println("OnlinePlayers"); }
 
+    public static void sendGameRequest(String receiver) {
+        outputToServer.println("GameRequest@" + username + "," + receiver);
+    }
+
+    public static void acceptGameRequest() {
+        outputToServer.println("InvitationAccept@" + username + "," + opponentUsername);
+    }
+
+    public static void rejectGameRequest(String sender) {
+        outputToServer.println("InvitationReject@" + username + "," + sender);
+    }
 }

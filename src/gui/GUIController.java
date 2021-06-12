@@ -9,16 +9,11 @@ public class GUIController implements Runnable{
     private static LoginWindow loginWindow;
     private static ConnectingWindow connectingWindow;
 
-
     @Override
     public void run() {
-
         loginWindow = new LoginWindow();
         connectingWindow = new ConnectingWindow();
-
         showLoginWindow();
-
-
     }
 
     private void showLoginWindow() {
@@ -45,5 +40,18 @@ public class GUIController implements Runnable{
 
     public static void removePlayerFromList(String username) {
         connectingWindow.removePlayerFromList(username);
+    }
+
+    public static boolean showGameRequest(String sender) {
+        int response = JOptionPane.showOptionDialog(null, sender + " invited you to play. Do you accept the request?", "Invitation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+        return response == JOptionPane.YES_OPTION;
+    }
+
+    public static void showInvitationAccept(String username) {
+        JOptionPane.showMessageDialog(null, username + " accepted your request. Connecting you...");
+    }
+
+    public static void showInvitationReject(String rejecter) {
+        JOptionPane.showMessageDialog(null, rejecter + " rejected your request. Try connecting with some other player or try again later", "Invitation rejected", JOptionPane.ERROR_MESSAGE);
     }
 }
