@@ -3,8 +3,6 @@ package gui;
 import client.Client;
 
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
 
 public class ConnectingWindow extends JFrame {
 
@@ -23,17 +21,14 @@ public class ConnectingWindow extends JFrame {
 
         dlm = new DefaultListModel();
         onlinePlayersList = new JList<>(dlm);
-        onlinePlayersList.addListSelectionListener(e -> {
-            btnSendRequest.setEnabled(!onlinePlayersList.isSelectionEmpty());
-        });
+        onlinePlayersList.addListSelectionListener(e ->
+            btnSendRequest.setEnabled(!onlinePlayersList.isSelectionEmpty()));
 
         pane.add(onlinePlayersList);
 
         btnSendRequest = new JButton("Send request");
         btnSendRequest.setEnabled(false);
-        btnSendRequest.addActionListener(e -> {
-            Client.sendGameRequest(onlinePlayersList.getSelectedValue());
-        });
+        btnSendRequest.addActionListener(e -> Client.sendGameRequest(onlinePlayersList.getSelectedValue()));
         pane.add(btnSendRequest);
 
         add(pane);
