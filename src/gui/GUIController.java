@@ -8,11 +8,18 @@ public class GUIController implements Runnable{
 
     private static LoginWindow loginWindow;
     private static ConnectingWindow connectingWindow;
+    private static GameWindow gameWindow;
 
     @Override
     public void run() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         loginWindow = new LoginWindow();
         connectingWindow = new ConnectingWindow();
+        gameWindow = new GameWindow();
         showLoginWindow();
     }
 
@@ -24,6 +31,11 @@ public class GUIController implements Runnable{
         loginWindow.setVisible(false);
         connectingWindow.setVisible(true);
         Client.requestPlayersFromServer();
+    }
+
+    private static void showGameWindow() {
+        connectingWindow.setVisible(false);
+        gameWindow.setVisible(true);
     }
 
     public static void loginSuccess() {
@@ -44,11 +56,14 @@ public class GUIController implements Runnable{
 
     public static boolean showGameRequest(String sender) {
         int response = JOptionPane.showOptionDialog(null, sender + " invited you to play. Do you accept the request?", "Invitation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+        if (response == JOptionPane.YES_OPTION) {
+            showGameWindow();
+        }
         return response == JOptionPane.YES_OPTION;
     }
 
-    public static void showInvitationAccept(String username) {
-        JOptionPane.showMessageDialog(null, username + " accepted your request. Connecting you...");
+    public static void showInvitationAccept() {
+        showGameWindow();
     }
 
     public static void showInvitationReject(String rejecter) {

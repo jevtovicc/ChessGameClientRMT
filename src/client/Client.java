@@ -36,10 +36,6 @@ public class Client {
 
                 if (messageFromServer == null) break;
 
-                if (messageFromServer.startsWith("Goodbye")) {
-                    break;
-                }
-
                 if (messageFromServer.startsWith("Username")) {
                     String status = messageFromServer.split("@")[1];
                     if (status.startsWith("OK")) {
@@ -80,7 +76,7 @@ public class Client {
                 }
 
                 if (messageFromServer.startsWith("InvitationAccept@")) {
-                    GUIController.showInvitationAccept(messageFromServer.split("@")[1]);
+                    GUIController.showInvitationAccept();
                 }
 
                 if (messageFromServer.startsWith("InvitationReject@")) {
