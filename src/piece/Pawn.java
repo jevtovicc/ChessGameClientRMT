@@ -1,0 +1,22 @@
+package piece;
+
+import board.Move;
+import color.PieceColor;
+
+import java.util.List;
+
+public class Pawn extends Piece {
+    public Pawn(PieceColor c) {
+        super(c);
+    }
+
+    @Override
+    public void move() {
+
+    }
+
+    @Override
+    public List<Move> getPossibleMoves() {
+        return null;
+    }
+}
