@@ -69,4 +69,6 @@ public class GUIController implements Runnable{
     public static void showInvitationReject(String rejecter) {
         JOptionPane.showMessageDialog(null, rejecter + " rejected your request. Try connecting with some other player or try again later", "Invitation rejected", JOptionPane.ERROR_MESSAGE);
     }
+
+    public static void exitProgram() { System.exit(0); }
 }

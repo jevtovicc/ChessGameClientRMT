@@ -34,7 +34,12 @@ public class Client {
             while (true) {
                 String messageFromServer = inputFromServer.readLine();
 
-                if (messageFromServer == null) break;
+                if (messageFromServer == null) {
+                    System.out.println("Server is down! Disconnecting you...");
+                    break;
+                }
+
+                if (messageFromServer.startsWith("Goodbye")) break;
 
                 if (messageFromServer.startsWith("Username")) {
                     String status = messageFromServer.split("@")[1];
@@ -87,6 +92,8 @@ public class Client {
             }
 
             connectionSocket.close();
+            System.out.println("Connection closed");
+            GUIController.exitProgram();
         } catch (IOException ex) {
             System.out.println("Server is down... Try again later");
         }
@@ -119,4 +126,6 @@ public class Client {
     public static void rejectGameRequest(String sender) {
         outputToServer.println("InvitationReject@" + username + "," + sender);
     }
+
+    public static void disconnect() { outputToServer.println("quit"); }
 }
