@@ -7,12 +7,12 @@ import java.util.List;
 
 public class Bishop extends Piece {
 
-    public Bishop(PieceColor c) {
-        super(c);
+    public Bishop(PieceColor c, String pngFilePath) {
+        super(c, pngFilePath);
     }
 
     @Override
-    public void move() {
+    public void move(Move m) {
 
     }
 

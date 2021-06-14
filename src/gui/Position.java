@@ -3,6 +3,7 @@ package gui;
 import piece.Piece;
 
 import javax.swing.*;
+import java.util.Optional;
 
 public class Position extends JButton {
     private Piece piece;
@@ -17,7 +18,7 @@ public class Position extends JButton {
 
     public void setPiece(Piece p) { piece = p; }
 
-    public Piece getPiece() { return piece; }
+    public Optional<Piece> getPiece() { return Optional.ofNullable(piece); }
     public char getColumn() { return column; }
     public int getRow() { return row; }
 

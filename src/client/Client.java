@@ -1,8 +1,6 @@
 package client;
 
-import gui.ConnectingWindow;
 import gui.GUIController;
-import gui.LoginWindow;
 
 import java.io.BufferedReader;
 import java.io.IOException;

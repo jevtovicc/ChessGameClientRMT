@@ -6,12 +6,12 @@ import color.PieceColor;
 import java.util.List;
 
 public class Rook extends Piece {
-    public Rook(PieceColor c) {
-        super(c);
+    public Rook(PieceColor c, String pngFilePath) {
+        super(c, pngFilePath);
     }
 
     @Override
-    public void move() {
+    public void move(Move m) {
 
     }
 

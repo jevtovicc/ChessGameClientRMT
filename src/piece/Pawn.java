@@ -6,12 +6,12 @@ import color.PieceColor;
 import java.util.List;
 
 public class Pawn extends Piece {
-    public Pawn(PieceColor c) {
-        super(c);
+    public Pawn(PieceColor c, String pngFilePath) {
+        super(c, pngFilePath);
     }
 
     @Override
-    public void move() {
+    public void move(Move m) {
 
     }
 
