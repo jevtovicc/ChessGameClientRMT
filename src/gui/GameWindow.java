@@ -109,15 +109,25 @@ public class GameWindow extends JFrame {
                 position.addActionListener(e ->
                     position.getPiece()
                             .ifPresentOrElse(piece -> {
-                                selectedPiece = piece;
-                                availablePositions = piece.getAvailablePositions();
-                                availablePositions.forEach(avPos -> avPos.setBorder(new LineBorder(Color.GREEN, 4)));
+                                if (selectedPiece == null) {
+                                    selectedPiece = piece;
+                                    availablePositions = piece.getAvailablePositions();
+                                    availablePositions.forEach(avPos -> avPos.setBorder(new LineBorder(Color.GREEN, 4)));
+                                } else {
+                                    if (selectedPiece.getColor() != piece.getColor() && availablePositions.contains(position)) {
+                                        selectedPiece.move(position);
+                                        selectedPiece = null;
+                                    }
+                                    resetAvailablePositions();
+                                }
+
                             }, () -> {
                                 if (selectedPiece != null) {
                                     if (availablePositions.contains(position)) {
                                         selectedPiece.move(position);
                                     }
                                     resetAvailablePositions();
+                                    selectedPiece = null;
                                 }
                             })
                 );

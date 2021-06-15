@@ -30,15 +30,16 @@ public class WhitePawn extends Pawn {
             positions.add(GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() - 2));
         }
 
-        // straight by one position
-        Position destination = GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() - 1);
-        if (destination.getPiece().isEmpty()) {
-            positions.add(destination);
-        }
-
-        // diagonally to eat opposite piece
         if (currPosition.getRow() - 1 >= 1) {
+            // straight by one position
+            Position destination = GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() - 1);
+            if (destination.getPiece().isEmpty()) {
+                positions.add(destination);
+            }
+
+            // diagonally to eat opposite piece
             if (currPosition.getColumn() - 1 >= 'a') {
+                // left diagonal
                 Position pos = GameWindow.getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() - 1);
                 pos.getPiece()
                         .ifPresent(currPiece -> {
@@ -47,7 +48,9 @@ public class WhitePawn extends Pawn {
                             }
                         });
             }
+
             if (currPosition.getColumn() + 1 <= 'h') {
+                // right diagonal
                 Position pos = GameWindow.getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow() - 1);
                 pos.getPiece()
                         .ifPresent(currPiece -> {
@@ -57,7 +60,6 @@ public class WhitePawn extends Pawn {
                         });
             }
         }
-
 
         return positions;
     }

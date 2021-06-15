@@ -30,15 +30,14 @@ public class BlackPawn extends Pawn {
             positions.add(GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() + 2));
         }
 
-        // straight by one position
-        Position destination = GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() + 1);
-
-        if (destination.getPiece().isEmpty()) {
-            positions.add(destination);
-        }
-
-        // diagonally to eat opposite piece
         if (currPosition.getRow() + 1 <= 8) {
+            // straight by one position
+            Position destination = GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() + 1);
+
+            if (destination.getPiece().isEmpty()) {
+                positions.add(destination);
+            }
+
             if (currPosition.getColumn() - 1 >= 'a') {
                 Position pos = GameWindow.getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() + 1);
                 pos.getPiece()
