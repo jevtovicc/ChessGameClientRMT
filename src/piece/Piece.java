@@ -1,6 +1,5 @@
 package piece;
 
-import board.Move;
 import gui.Position;
 import color.PieceColor;
 
@@ -22,6 +21,6 @@ public abstract class Piece {
     public Position getPosition() { return position; }
     public String getPngFilePath() { return pngFilePath; }
 
-    public abstract void move(Move m);
-    public abstract List<Move> getPossibleMoves();
+    public abstract void move(Position destination);
+    public abstract List<Position> getAvailablePositions();
 }

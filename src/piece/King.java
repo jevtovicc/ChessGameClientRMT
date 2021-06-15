@@ -1,7 +1,7 @@
 package piece;
 
-import board.Move;
 import color.PieceColor;
+import gui.Position;
 
 import java.util.List;
 
@@ -11,12 +11,12 @@ public class King extends Piece {
     }
 
     @Override
-    public void move(Move m) {
+    public void move(Position destination) {
 
     }
 
     @Override
-    public List<Move> getPossibleMoves() {
+    public List<Position> getAvailablePositions() {
         return null;
     }
 }

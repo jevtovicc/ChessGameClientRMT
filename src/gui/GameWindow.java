@@ -1,6 +1,5 @@
 package gui;
 
-import board.Move;
 import color.PieceColor;
 import piece.*;
 
@@ -14,7 +13,7 @@ public class GameWindow extends JFrame {
     JPanel pane;
     static java.util.List<Position> positions;
     Piece selectedPiece;
-    static java.util.List<Move> availableMoves;
+    static java.util.List<Position> availablePositions;
 
     public GameWindow() {
         setTitle("Chess game");
@@ -31,7 +30,7 @@ public class GameWindow extends JFrame {
         populateBoard();
 
         add(pane);
-//        setVisible(true); // for testing purposes
+        setVisible(true); // for testing purposes
     }
 
     private void populateBoard() {
@@ -47,54 +46,48 @@ public class GameWindow extends JFrame {
                     PieceColor pieceColor = row == 1 || row == 2 ? PieceColor.Black : PieceColor.White;
 
                     switch (col) {
-                        case 'a', 'h':
+                        case 'a', 'h' -> {
                             if (row == 1 || row == 8) {
                                 p = new Rook(pieceColor, "resources/rook-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
-                            }
-                            else {
+                            } else {
                                 p = new Pawn(pieceColor, "resources/pawn-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
                             }
                             imageIcon = new ImageIcon(p.getPngFilePath());
-                            break;
-                        case 'b', 'g':
+                        }
+                        case 'b', 'g' -> {
                             if (row == 1 || row == 8) {
                                 p = new Knight(pieceColor, "resources/knight-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
-                            }
-                            else {
+                            } else {
                                 p = new Pawn(pieceColor, "resources/pawn-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
                             }
                             imageIcon = new ImageIcon(p.getPngFilePath());
-                            break;
-                        case 'c', 'f':
+                        }
+                        case 'c', 'f' -> {
                             if (row == 1 || row == 8) {
                                 p = new Bishop(pieceColor, "resources/bishop-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
-                            }
-                            else {
+                            } else {
                                 p = new Pawn(pieceColor, "resources/pawn-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
                             }
                             imageIcon = new ImageIcon(p.getPngFilePath());
-                            break;
-                        case 'd':
+                        }
+                        case 'd' -> {
                             if (row == 1 || row == 8) {
                                 p = new Queen(pieceColor, "resources/queen-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
-                            }
-                            else {
+                            } else {
                                 p = new Pawn(pieceColor, "resources/pawn-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
                             }
                             imageIcon = new ImageIcon(p.getPngFilePath());
-                            break;
-                        case 'e':
+                        }
+                        case 'e' -> {
                             if (row == 1 || row == 8) {
                                 p = new King(pieceColor, "resources/king-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
-                            }
-                            else {
+                            } else {
                                 p = new Pawn(pieceColor, "resources/pawn-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
                             }
                             imageIcon = new ImageIcon(p.getPngFilePath());
-                            break;
-                        default:
-                            p = null;
-                    };
+                        }
+                        default -> p = null;
+                    }
 
                 }
 
@@ -103,25 +96,21 @@ public class GameWindow extends JFrame {
                 position.setIcon(imageIcon);
                 position.setBackground(fieldColor);
 
-                position.addActionListener(e -> {
+                position.addActionListener(e ->
                     position.getPiece()
                             .ifPresentOrElse(piece -> {
                                 selectedPiece = piece;
-                                availableMoves = piece.getPossibleMoves();
-                                availableMoves.forEach(m -> {
-                                        Position availablePosition = getPositionAt(m.getColumn(), m.getRow());
-                                        availablePosition.setBorder(new LineBorder(Color.GREEN, 4));
-                                    });
+                                availablePositions = piece.getAvailablePositions();
+                                availablePositions.forEach(avPos -> avPos.setBorder(new LineBorder(Color.GREEN, 4)));
                             }, () -> {
                                 if (selectedPiece != null) {
-                                    Move m = new Move(position.getRow(), position.getColumn());
-                                    if (availableMoves.contains(m)) {
-                                        selectedPiece.move(m);
+                                    if (availablePositions.contains(position)) {
+                                        selectedPiece.move(position);
                                     }
-                                    resetAvailableMoves();
+                                    resetAvailablePositions();
                                 }
-                            });
-                });
+                            })
+                );
 
                 if (p != null) p.setPosition(position);
 
@@ -142,28 +131,23 @@ public class GameWindow extends JFrame {
     public static void setPieceAt(Piece piece, char col, int row) {
         Position position = getPositionAt(col, row);
         position.setPiece(piece);
-        ImageIcon imageIcon = new ImageIcon(piece.getPngFilePath());
-        position.setIcon(imageIcon);
+        position.setIcon(new ImageIcon(piece.getPngFilePath()));
         piece.setPosition(position);
     }
 
-    private static void resetAvailableMoves() {
-        availableMoves.forEach(m -> {
-            Position p = getPositionAt(m.getColumn(), m.getRow());
-            p.setBorder(null);
-        });
-        availableMoves.clear();
+    private static void resetAvailablePositions() {
+        availablePositions.forEach(p -> p.setBorder(null));
+        availablePositions.clear();
     }
 
-
     // for testing purposes
-//    public static void main(String[] args) {
-//        try {
-//            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        new GameWindow();
-//    }
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        new GameWindow();
+    }
 
 }
