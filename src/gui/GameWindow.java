@@ -117,8 +117,14 @@ public class GameWindow extends JFrame {
                                     if (selectedPiece.getColor() != piece.getColor() && availablePositions.contains(position)) {
                                         selectedPiece.move(position);
                                         selectedPiece = null;
+                                        resetAvailablePositions();
+                                    } else if (selectedPiece.getColor() == piece.getColor()) {
+                                        resetAvailablePositions();
+                                        selectedPiece = piece;
+                                        availablePositions = piece.getAvailablePositions();
+                                        availablePositions.forEach(avPos -> avPos.setBorder(new LineBorder(Color.GREEN, 4)));
                                     }
-                                    resetAvailablePositions();
+
                                 }
 
                             }, () -> {
