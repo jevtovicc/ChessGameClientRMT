@@ -1,5 +1,6 @@
 package piece;
 
+import gui.GameWindow;
 import gui.Position;
 import color.PieceColor;
 
@@ -21,6 +22,12 @@ public abstract class Piece {
     public Position getPosition() { return position; }
     public String getPngFilePath() { return pngFilePath; }
 
-    public abstract void move(Position destination);
+    public void move(Position destination) {
+        Position position = getPosition();
+        position.setPiece(null); // set previous position to null
+        position.setIcon(null);
+        GameWindow.setPieceAt(this, destination.getColumn(), destination.getRow());
+    }
+
     public abstract List<Position> getAvailablePositions();
 }

@@ -50,7 +50,9 @@ public class GameWindow extends JFrame {
                             if (row == 1 || row == 8) {
                                 p = new Rook(pieceColor, "resources/rook-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = new Pawn(pieceColor, "resources/pawn-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
+                                p = pieceColor == PieceColor.Black ?
+                                        new BlackPawn(pieceColor, "resources/pawn-black.png") :
+                                        new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
                             imageIcon = new ImageIcon(p.getPngFilePath());
                         }
@@ -58,7 +60,9 @@ public class GameWindow extends JFrame {
                             if (row == 1 || row == 8) {
                                 p = new Knight(pieceColor, "resources/knight-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = new Pawn(pieceColor, "resources/pawn-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
+                                p = pieceColor == PieceColor.Black ?
+                                        new BlackPawn(pieceColor, "resources/pawn-black.png") :
+                                        new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
                             imageIcon = new ImageIcon(p.getPngFilePath());
                         }
@@ -66,7 +70,9 @@ public class GameWindow extends JFrame {
                             if (row == 1 || row == 8) {
                                 p = new Bishop(pieceColor, "resources/bishop-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = new Pawn(pieceColor, "resources/pawn-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
+                                p = pieceColor == PieceColor.Black ?
+                                        new BlackPawn(pieceColor, "resources/pawn-black.png") :
+                                        new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
                             imageIcon = new ImageIcon(p.getPngFilePath());
                         }
@@ -74,7 +80,9 @@ public class GameWindow extends JFrame {
                             if (row == 1 || row == 8) {
                                 p = new Queen(pieceColor, "resources/queen-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = new Pawn(pieceColor, "resources/pawn-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
+                                p = pieceColor == PieceColor.Black ?
+                                        new BlackPawn(pieceColor, "resources/pawn-black.png") :
+                                        new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
                             imageIcon = new ImageIcon(p.getPngFilePath());
                         }
@@ -82,7 +90,9 @@ public class GameWindow extends JFrame {
                             if (row == 1 || row == 8) {
                                 p = new King(pieceColor, "resources/king-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = new Pawn(pieceColor, "resources/pawn-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
+                                p = pieceColor == PieceColor.Black ?
+                                        new BlackPawn(pieceColor, "resources/pawn-black.png") :
+                                        new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
                             imageIcon = new ImageIcon(p.getPngFilePath());
                         }

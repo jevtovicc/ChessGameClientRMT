@@ -14,14 +14,6 @@ public class Knight extends Piece {
     }
 
     @Override
-    public void move(Position destination) {
-        Position position = getPosition();
-        position.setPiece(null); // set previous position to null
-        position.setIcon(null);
-        GameWindow.setPieceAt(this, destination.getColumn(), destination.getRow());
-    }
-
-    @Override
     public List<Position> getAvailablePositions() {
 
         List<Position> positions = new ArrayList<>();

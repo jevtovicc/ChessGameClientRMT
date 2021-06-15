@@ -11,11 +11,6 @@ public class Rook extends Piece {
     }
 
     @Override
-    public void move(Position destination) {
-
-    }
-
-    @Override
     public List<Position> getAvailablePositions() {
         return null;
     }

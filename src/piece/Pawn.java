@@ -1,22 +1,22 @@
 package piece;
 
 import color.PieceColor;
+import gui.GameWindow;
 import gui.Position;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Pawn extends Piece {
+public abstract class Pawn extends Piece {
+
+    private boolean moved;
+
     public Pawn(PieceColor c, String pngFilePath) {
         super(c, pngFilePath);
     }
 
-    @Override
-    public void move(Position destination) {
+    public abstract List<Position> getAvailablePositions();
 
-    }
-
-    @Override
-    public List<Position> getAvailablePositions() {
-        return null;
-    }
+    public boolean hasMoved() { return moved; }
+    public void setMoved(boolean moved) { this.moved = moved; }
 }
