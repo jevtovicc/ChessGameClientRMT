@@ -21,6 +21,12 @@ public class Client {
     static Socket connectionSocket;
     static String username;
     static String opponentUsername;
+    static boolean onMove;
+    static boolean isWhite;
+
+    public static boolean isInGame() { return opponentUsername != null; }
+    public static boolean isWhite() { return isWhite; }
+    public static void setIsWhite(boolean flag) { isWhite = flag; }
 
     public static void main(String[] args) {
 
@@ -103,6 +109,8 @@ public class Client {
 
                     Piece piece = source.getPiece().get();
                     piece.move(destination);
+                    onMove = true;
+                    GameWindow.toggleMovement(onMove);
                 }
 
             }
@@ -146,6 +154,8 @@ public class Client {
     public static void disconnect() { outputToServer.println("quit"); }
 
     public static void makeMove(Position source, Position destination) {
+        onMove = false;
+        GameWindow.toggleMovement(onMove);
         // opponentUsename, src-col,src-row,dest-col,dest-row
         outputToServer.println("MoveMade@" + opponentUsername + "," + source.getColumn() + ","
                 + source.getRow() + "," + destination.getColumn() + "," + destination.getRow());

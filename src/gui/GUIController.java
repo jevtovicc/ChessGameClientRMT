@@ -19,7 +19,6 @@ public class GUIController implements Runnable{
         }
         loginWindow = new LoginWindow();
         connectingWindow = new ConnectingWindow();
-        gameWindow = new GameWindow();
         showLoginWindow();
     }
 
@@ -34,6 +33,7 @@ public class GUIController implements Runnable{
     }
 
     private static void showGameWindow() {
+        gameWindow = new GameWindow();
         connectingWindow.setVisible(false);
         gameWindow.setVisible(true);
     }
@@ -57,12 +57,14 @@ public class GUIController implements Runnable{
     public static boolean showGameRequest(String sender) {
         int response = JOptionPane.showOptionDialog(null, sender + " invited you to play. Do you accept the request?", "Invitation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
         if (response == JOptionPane.YES_OPTION) {
+            Client.setIsWhite(true);
             showGameWindow();
         }
         return response == JOptionPane.YES_OPTION;
     }
 
     public static void showInvitationAccept() {
+        Client.setIsWhite(false);
         showGameWindow();
     }
 

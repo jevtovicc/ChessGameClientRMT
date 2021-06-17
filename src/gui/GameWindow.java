@@ -102,7 +102,7 @@ public class GameWindow extends JFrame {
 
                 }
 
-                Color fieldColor = (col - 'a' + row - 1) % 2 == 0 ? new Color(0xcc9b6d) : new Color(0x393e46);
+                Color fieldColor = (col - 'a' + row - 1) % 2 == 0 ? new Color(0x493323) : new Color(0xE1BC91);
                 Position position = new Position(p, col, row);
                 position.setIcon(imageIcon);
                 position.setBackground(fieldColor);
@@ -144,6 +144,8 @@ public class GameWindow extends JFrame {
                 );
 
                 if (p != null) p.setPosition(position);
+                if (!Client.isWhite() || (p != null && p.getColor() == PieceColor.Black && Client.isWhite()))
+                    position.setEnabled(false);
 
                 positions.add(position);
 
@@ -169,6 +171,17 @@ public class GameWindow extends JFrame {
     private static void resetAvailablePositions() {
         availablePositions.forEach(p -> p.setBorder(null));
         availablePositions.clear();
+    }
+
+    public static void toggleMovement(boolean enabled) {
+        for (Position position : positions) {
+            position.getPiece()
+                    .ifPresentOrElse(piece -> {
+                        if (piece.getColor() == (Client.isWhite() ? PieceColor.White : PieceColor.Black)) {
+                            position.setEnabled(enabled);
+                        }
+                    }, () -> position.setEnabled(enabled));
+        }
     }
 
     // for testing purposes
