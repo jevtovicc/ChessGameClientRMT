@@ -7,13 +7,15 @@ import piece.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class GameWindow extends JFrame {
 
     JPanel pane;
     static java.util.List<Position> positions;
-    Piece selectedPiece;
+    static Piece selectedPiece;
     static java.util.List<Position> availablePositions;
 
     public GameWindow() {
@@ -107,45 +109,12 @@ public class GameWindow extends JFrame {
                 position.setIcon(imageIcon);
                 position.setBackground(fieldColor);
 
-                position.addActionListener(e ->
-                    position.getPiece()
-                            .ifPresentOrElse(piece -> {
-                                if (selectedPiece == null) {
-                                    selectedPiece = piece;
-                                    availablePositions = piece.getAvailablePositions();
-                                    availablePositions.forEach(avPos -> avPos.setBorder(new LineBorder(Color.GREEN, 4)));
-                                } else {
-                                    if (selectedPiece.getColor() != piece.getColor() && availablePositions.contains(position)) {
-                                        Position source = selectedPiece.getPosition();
-                                        selectedPiece.move(position);
-                                        Client.makeMove(source, position);
-                                        selectedPiece = null;
-                                        resetAvailablePositions();
-                                    } else if (selectedPiece.getColor() == piece.getColor()) {
-                                        resetAvailablePositions();
-                                        selectedPiece = piece;
-                                        availablePositions = piece.getAvailablePositions();
-                                        availablePositions.forEach(avPos -> avPos.setBorder(new LineBorder(Color.GREEN, 4)));
-                                    }
-
-                                }
-
-                            }, () -> {
-                                if (selectedPiece != null) {
-                                    if (availablePositions.contains(position)) {
-                                        Position source = selectedPiece.getPosition();
-                                        selectedPiece.move(position);
-                                        Client.makeMove(source, position);
-                                    }
-                                    resetAvailablePositions();
-                                    selectedPiece = null;
-                                }
-                            })
-                );
+                // setup initial state
+                if (Client.isWhite() && (p == null || p.getColor() == PieceColor.White || !Client.isWhite()))
+                    position.addActionListener(position);
 
                 if (p != null) p.setPosition(position);
-                if (!Client.isWhite() || (p != null && p.getColor() == PieceColor.Black && Client.isWhite()))
-                    position.setEnabled(false);
+
 
                 positions.add(position);
 
@@ -168,21 +137,32 @@ public class GameWindow extends JFrame {
         piece.setPosition(position);
     }
 
-    private static void resetAvailablePositions() {
+    public static void resetAvailablePositions() {
         availablePositions.forEach(p -> p.setBorder(null));
         availablePositions.clear();
     }
 
-    public static void toggleMovement(boolean enabled) {
+    public static void toggleActionListener(boolean enabled) {
         for (Position position : positions) {
             position.getPiece()
                     .ifPresentOrElse(piece -> {
                         if (piece.getColor() == (Client.isWhite() ? PieceColor.White : PieceColor.Black)) {
-                            position.setEnabled(enabled);
+                            if (enabled) {
+                                position.addActionListener(position);
+                            } else {
+                                position.removeActionListener(position);
+                            }
                         }
-                    }, () -> position.setEnabled(enabled));
+                    }, () -> {
+                        if (enabled) {
+                            position.addActionListener(position);
+                        } else {
+                            position.removeActionListener(position);
+                        }
+                    });
         }
     }
+
 
     // for testing purposes
 //    public static void main(String[] args) {

@@ -110,7 +110,7 @@ public class Client {
                     Piece piece = source.getPiece().get();
                     piece.move(destination);
                     onMove = true;
-                    GameWindow.toggleMovement(onMove);
+                    GameWindow.toggleActionListener(onMove);
                 }
 
             }
@@ -155,7 +155,7 @@ public class Client {
 
     public static void makeMove(Position source, Position destination) {
         onMove = false;
-        GameWindow.toggleMovement(onMove);
+        GameWindow.toggleActionListener(onMove);
         // opponentUsename, src-col,src-row,dest-col,dest-row
         outputToServer.println("MoveMade@" + opponentUsername + "," + source.getColumn() + ","
                 + source.getRow() + "," + destination.getColumn() + "," + destination.getRow());
