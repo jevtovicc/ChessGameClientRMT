@@ -33,6 +33,9 @@ public class Position extends JButton implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (piece != null) {
             if (GameWindow.selectedPiece == null) {
+                if ((Client.isWhite() && piece.getColor() == Piece.PieceColor.Black) || (!Client.isWhite() && piece.getColor() == Piece.PieceColor.White)) {
+                    return;
+                }
                 GameWindow.selectedPiece = piece;
                 GameWindow.availablePositions = piece.getAvailablePositions();
                 GameWindow.availablePositions.forEach(avPos -> {
