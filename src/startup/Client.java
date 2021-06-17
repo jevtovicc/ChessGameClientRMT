@@ -1,11 +1,10 @@
-package client;
+package startup;
 
 import gui.GUIController;
 import gui.GameWindow;
 import gui.Position;
 import piece.Piece;
 
-import javax.crypto.spec.OAEPParameterSpec;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

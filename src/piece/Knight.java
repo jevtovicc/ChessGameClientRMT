@@ -1,6 +1,5 @@
 package piece;
 
-import color.PieceColor;
 import gui.GameWindow;
 import gui.Position;
 

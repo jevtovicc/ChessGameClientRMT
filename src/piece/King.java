@@ -1,6 +1,5 @@
 package piece;
 
-import color.PieceColor;
 import gui.GameWindow;
 import gui.Position;
 
@@ -8,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class King extends Piece {
-    public King(PieceColor c, String pngFilePath) {
+    public King(Piece.PieceColor c, String pngFilePath) {
         super(c, pngFilePath);
     }
 

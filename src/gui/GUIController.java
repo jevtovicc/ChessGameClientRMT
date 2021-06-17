@@ -1,6 +1,6 @@
 package gui;
 
-import client.Client;
+import startup.Client;
 
 import javax.swing.*;
 

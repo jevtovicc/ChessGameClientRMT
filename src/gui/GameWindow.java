@@ -1,14 +1,10 @@
 package gui;
 
-import client.Client;
-import color.PieceColor;
+import startup.Client;
 import piece.*;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class GameWindow extends JFrame {
@@ -46,14 +42,14 @@ public class GameWindow extends JFrame {
 
                 if (row == 1 || row == 2 || row == 7 || row == 8) {
 
-                    PieceColor pieceColor = row == 1 || row == 2 ? PieceColor.Black : PieceColor.White;
+                    Piece.PieceColor pieceColor = row == 1 || row == 2 ? Piece.PieceColor.Black : Piece.PieceColor.White;
 
                     switch (col) {
                         case 'a', 'h' -> {
                             if (row == 1 || row == 8) {
-                                p = new Rook(pieceColor, "resources/rook-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
+                                p = new Rook(pieceColor, "resources/rook-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = pieceColor == PieceColor.Black ?
+                                p = pieceColor == Piece.PieceColor.Black ?
                                         new BlackPawn(pieceColor, "resources/pawn-black.png") :
                                         new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
@@ -61,9 +57,9 @@ public class GameWindow extends JFrame {
                         }
                         case 'b', 'g' -> {
                             if (row == 1 || row == 8) {
-                                p = new Knight(pieceColor, "resources/knight-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
+                                p = new Knight(pieceColor, "resources/knight-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = pieceColor == PieceColor.Black ?
+                                p = pieceColor == Piece.PieceColor.Black ?
                                         new BlackPawn(pieceColor, "resources/pawn-black.png") :
                                         new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
@@ -71,9 +67,9 @@ public class GameWindow extends JFrame {
                         }
                         case 'c', 'f' -> {
                             if (row == 1 || row == 8) {
-                                p = new Bishop(pieceColor, "resources/bishop-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
+                                p = new Bishop(pieceColor, "resources/bishop-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = pieceColor == PieceColor.Black ?
+                                p = pieceColor== Piece.PieceColor.Black ?
                                         new BlackPawn(pieceColor, "resources/pawn-black.png") :
                                         new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
@@ -81,9 +77,9 @@ public class GameWindow extends JFrame {
                         }
                         case 'd' -> {
                             if (row == 1 || row == 8) {
-                                p = new Queen(pieceColor, "resources/queen-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
+                                p = new Queen(pieceColor, "resources/queen-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = pieceColor == PieceColor.Black ?
+                                p = pieceColor == Piece.PieceColor.Black ?
                                         new BlackPawn(pieceColor, "resources/pawn-black.png") :
                                         new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
@@ -91,9 +87,9 @@ public class GameWindow extends JFrame {
                         }
                         case 'e' -> {
                             if (row == 1 || row == 8) {
-                                p = new King(pieceColor, "resources/king-" + (pieceColor == PieceColor.Black ? "black" : "white") + ".png");
+                                p = new King(pieceColor, "resources/king-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = pieceColor == PieceColor.Black ?
+                                p = pieceColor == Piece.PieceColor.Black ?
                                         new BlackPawn(pieceColor, "resources/pawn-black.png") :
                                         new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
@@ -110,7 +106,7 @@ public class GameWindow extends JFrame {
                 position.setBackground(fieldColor);
 
                 // setup initial state
-                if (Client.isWhite() && (p == null || p.getColor() == PieceColor.White || !Client.isWhite()))
+                if (Client.isWhite() && (p == null || p.getColor() == Piece.PieceColor.White || !Client.isWhite()))
                     position.addActionListener(position);
 
                 if (p != null) p.setPosition(position);
@@ -146,7 +142,7 @@ public class GameWindow extends JFrame {
         for (Position position : positions) {
             position.getPiece()
                     .ifPresentOrElse(piece -> {
-                        if (piece.getColor() == (Client.isWhite() ? PieceColor.White : PieceColor.Black)) {
+                        if (piece.getColor() == (Client.isWhite() ? Piece.PieceColor.White : Piece.PieceColor.Black)) {
                             if (enabled) {
                                 position.addActionListener(position);
                             } else {

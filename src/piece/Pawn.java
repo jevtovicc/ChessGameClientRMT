@@ -1,10 +1,7 @@
 package piece;
 
-import color.PieceColor;
-import gui.GameWindow;
 import gui.Position;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Pawn extends Piece {

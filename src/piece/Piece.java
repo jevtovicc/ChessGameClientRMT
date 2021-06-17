@@ -2,7 +2,6 @@ package piece;
 
 import gui.GameWindow;
 import gui.Position;
-import color.PieceColor;
 
 import java.util.List;
 
@@ -10,6 +9,10 @@ public abstract class Piece {
     private PieceColor pieceColor;
     private Position position;
     private String pngFilePath;
+
+    public enum PieceColor {
+        White, Black
+    }
 
     public Piece(PieceColor c, String pngFilePath) {
         pieceColor = c;
