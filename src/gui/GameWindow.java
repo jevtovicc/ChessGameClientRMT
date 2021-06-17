@@ -1,5 +1,6 @@
 package gui;
 
+import client.Client;
 import color.PieceColor;
 import piece.*;
 
@@ -30,7 +31,7 @@ public class GameWindow extends JFrame {
         populateBoard();
 
         add(pane);
-        setVisible(true); // for testing purposes
+//        setVisible(true); // for testing purposes
     }
 
     private void populateBoard() {
@@ -115,7 +116,9 @@ public class GameWindow extends JFrame {
                                     availablePositions.forEach(avPos -> avPos.setBorder(new LineBorder(Color.GREEN, 4)));
                                 } else {
                                     if (selectedPiece.getColor() != piece.getColor() && availablePositions.contains(position)) {
+                                        Position source = selectedPiece.getPosition();
                                         selectedPiece.move(position);
+                                        Client.makeMove(source, position);
                                         selectedPiece = null;
                                         resetAvailablePositions();
                                     } else if (selectedPiece.getColor() == piece.getColor()) {
@@ -130,7 +133,9 @@ public class GameWindow extends JFrame {
                             }, () -> {
                                 if (selectedPiece != null) {
                                     if (availablePositions.contains(position)) {
+                                        Position source = selectedPiece.getPosition();
                                         selectedPiece.move(position);
+                                        Client.makeMove(source, position);
                                     }
                                     resetAvailablePositions();
                                     selectedPiece = null;
@@ -167,13 +172,13 @@ public class GameWindow extends JFrame {
     }
 
     // for testing purposes
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        new GameWindow();
-    }
+//    public static void main(String[] args) {
+//        try {
+//            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        new GameWindow();
+//    }
 
 }

@@ -1,7 +1,11 @@
 package client;
 
 import gui.GUIController;
+import gui.GameWindow;
+import gui.Position;
+import piece.Piece;
 
+import javax.crypto.spec.OAEPParameterSpec;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -78,14 +82,28 @@ public class Client {
                     }
                 }
 
-                if (messageFromServer.startsWith("InvitationAccept@")) {
+                if (messageFromServer.startsWith("InvitationAccept")) {
                     GUIController.showInvitationAccept();
+                    opponentUsername = messageFromServer.split("@")[1];
                 }
 
-                if (messageFromServer.startsWith("InvitationReject@")) {
+                if (messageFromServer.startsWith("InvitationReject")) {
                     GUIController.showInvitationReject(messageFromServer.split("@")[1]);
                 }
 
+                if (messageFromServer.startsWith("MoveMade")) {
+                    String[] infos = messageFromServer.split("@")[1].split(",");
+                    char srcCol = infos[0].charAt(0);
+                    int srcRow = Integer.parseInt(infos[1]);
+                    char destCol = infos[2].charAt(0);
+                    int destRow = Integer.parseInt(infos[3]);
+
+                    Position source = GameWindow.getPositionAt(srcCol, srcRow);
+                    Position destination = GameWindow.getPositionAt(destCol, destRow);
+
+                    Piece piece = source.getPiece().get();
+                    piece.move(destination);
+                }
 
             }
 
@@ -126,4 +144,10 @@ public class Client {
     }
 
     public static void disconnect() { outputToServer.println("quit"); }
+
+    public static void makeMove(Position source, Position destination) {
+        // opponentUsename, src-col,src-row,dest-col,dest-row
+        outputToServer.println("MoveMade@" + opponentUsername + "," + source.getColumn() + ","
+                + source.getRow() + "," + destination.getColumn() + "," + destination.getRow());
+    }
 }
