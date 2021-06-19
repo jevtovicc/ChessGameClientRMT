@@ -26,7 +26,9 @@ public class BlackPawn extends Pawn {
         Position currPosition = getPosition();
 
         if (!hasMoved()) {
-            positions.add(GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() + 2));
+            if (GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() + 1).getPiece().isEmpty()
+                    && GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() + 2).getPiece().isEmpty())
+                positions.add(GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() + 2));
         }
 
         if (currPosition.getRow() + 1 <= 8) {

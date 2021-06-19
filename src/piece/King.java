@@ -127,32 +127,6 @@ public class King extends Piece {
 
     public boolean isCheckMate() {
 
-        List<Position> availablePositions = getAvailablePositions();
-
-        for (var avPos : availablePositions) {
-            Position prevPosition = getPosition();
-            Piece prevPiece = null;
-            if (avPos.getPiece().isPresent()) {
-                prevPiece = avPos.getPiece().get();
-            }
-            move(avPos);
-            if (!isInDanger()) {
-                move(prevPosition);
-                if (prevPiece != null)
-                    prevPiece.move(avPos);
-                return false;
-            }
-            move(prevPosition);
-            if (prevPiece != null) {
-                prevPiece.move(avPos);
-            }
-        }
-
-        return getPreventingPositions().isEmpty();
-    }
-
-    private Map<Piece, List<Position>> getPreventingPositions() {
-
         Map<Piece, List<Position>> map = new HashMap<>();
 
         List<Piece> pieces =
@@ -197,6 +171,6 @@ public class King extends Piece {
             }
         }
 
-        return map;
+        return map.isEmpty();
     }
 }

@@ -26,6 +26,8 @@ public class WhitePawn extends Pawn {
         Position currPosition = getPosition();
 
         if (!hasMoved()) {
+            if (GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() - 1).getPiece().isEmpty()
+                && GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() - 2).getPiece().isEmpty())
             positions.add(GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() - 2));
         }
 
