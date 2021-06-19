@@ -110,6 +110,13 @@ public class Client {
                     piece.move(destination);
                     onMove = true;
                     GameWindow.toggleActionListener(onMove);
+                    /* if check */
+                    if (GameWindow.calculateIfInDanger()) {
+                        /* check if checkmate */
+                        if (GameWindow.calculateIfCheckmate()) {
+                            GUIController.showCheckmateDialog();
+                        }
+                    }
                 }
 
             }

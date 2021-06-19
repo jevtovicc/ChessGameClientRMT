@@ -72,5 +72,9 @@ public class GUIController implements Runnable{
         JOptionPane.showMessageDialog(null, rejecter + " rejected your request. Try connecting with some other player or try again later", "Invitation rejected", JOptionPane.ERROR_MESSAGE);
     }
 
+    public static void showCheckmateDialog() {
+        JOptionPane.showMessageDialog(null, "Checkmate! You lost the game :(", "Checkmate alert", JOptionPane.INFORMATION_MESSAGE);
+    }
+
     public static void exitProgram() { System.exit(0); }
 }

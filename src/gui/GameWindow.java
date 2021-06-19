@@ -6,11 +6,12 @@ import piece.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class GameWindow extends JFrame {
 
     JPanel pane;
-    static java.util.List<Position> positions;
+    public static java.util.List<Position> positions;
     static Piece selectedPiece;
     static java.util.List<Position> availablePositions;
 
@@ -29,7 +30,6 @@ public class GameWindow extends JFrame {
         populateBoard();
 
         add(pane);
-//        setVisible(true); // for testing purposes
     }
 
     private void populateBoard() {
@@ -111,9 +111,7 @@ public class GameWindow extends JFrame {
 
                 if (p != null) p.setPosition(position);
 
-
                 positions.add(position);
-
                 pane.add(position);
             }
         }
@@ -159,15 +157,26 @@ public class GameWindow extends JFrame {
         }
     }
 
+    public static boolean calculateIfInDanger() {
+        Piece.PieceColor pieceColor = Client.isWhite() ? Piece.PieceColor.White : Piece.PieceColor.Black;
+        King king = (King) positions.stream()
+                .filter(p -> p.getPiece().isPresent() && p.getPiece().get().getColor() == pieceColor)
+                .map(p -> p.getPiece().get())
+                .filter(p -> p instanceof King)
+                .findFirst()
+                .get();
+        return king.isInDanger();
+    }
 
-    // for testing purposes
-//    public static void main(String[] args) {
-//        try {
-//            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        new GameWindow();
-//    }
+    public static boolean calculateIfCheckmate() {
+        Piece.PieceColor pieceColor = Client.isWhite() ? Piece.PieceColor.White : Piece.PieceColor.Black;
+        King king = (King) positions.stream()
+                .filter(p -> p.getPiece().isPresent() && p.getPiece().get().getColor() == pieceColor)
+                .map(p -> p.getPiece().get())
+                .filter(p -> p instanceof King)
+                .findFirst()
+                .get();
+        return king.isCheckMate();
+    }
 
 }

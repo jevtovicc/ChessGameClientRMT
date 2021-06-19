@@ -55,7 +55,12 @@ public class Position extends JButton implements ActionListener {
                     GameWindow.resetAvailablePositions();
                     GameWindow.selectedPiece = piece;
                     GameWindow.availablePositions = piece.getAvailablePositions();
-                    GameWindow.availablePositions.forEach(avPos -> avPos.setBorder(new LineBorder(Color.GREEN, 4)));
+                    GameWindow.availablePositions.forEach(avPos -> {
+                        avPos.setBorder(new LineBorder(Color.GREEN, 4));
+                        if (avPos.getActionListeners().length == 0) {
+                            avPos.addActionListener(avPos);
+                        }
+                    });
                 }
 
             }
