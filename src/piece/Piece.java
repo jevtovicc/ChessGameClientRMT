@@ -33,4 +33,7 @@ public abstract class Piece {
     }
 
     public abstract List<Position> getAvailablePositions();
+
+    @Override
+    public String toString() { return getColor() + "-" + getClass().getName(); }
 }

@@ -4,8 +4,12 @@ import startup.Client;
 import piece.*;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class GameWindow extends JFrame {
@@ -177,6 +181,77 @@ public class GameWindow extends JFrame {
                 .findFirst()
                 .get();
         return king.isCheckMate();
+    }
+
+    public static void func() {
+
+        Piece.PieceColor pieceColor = Client.isWhite() ? Piece.PieceColor.White : Piece.PieceColor.Black;
+        King king = (King) positions.stream()
+                .filter(p -> p.getPiece().isPresent() && p.getPiece().get().getColor() == pieceColor)
+                .map(p -> p.getPiece().get())
+                .filter(p -> p instanceof King)
+                .findFirst()
+                .get();
+
+        var map = king.getPreventingPositions();
+
+        List<Piece> pieces = GameWindow.positions.stream()
+                .filter(p -> p.getPiece().isPresent() && p.getPiece().get().getColor() == king.getColor())
+                .map(position -> position.getPiece().get())
+                .collect(Collectors.toList());
+
+        for (Piece piece : pieces) {
+            piece.getPosition().removeActionListener(piece.getPosition());
+//            if (!map.containsKey(piece)) {
+//                piece.getPosition().removeActionListener(piece.getPosition() );
+//            }
+        }
+
+        map.forEach((piece, preventingPositions) -> {
+            piece.getPosition().addActionListener(e -> {
+                if (selectedPiece == null) {
+                    selectedPiece = piece;
+                    preventingPositions.forEach(position -> {
+                        position.removeActionListener(position);
+                        position.setBorder(new LineBorder(Color.GREEN, 4));
+                        position.addActionListener(event -> {
+                            Position source = piece.getPosition();
+                            piece.move(position);
+                            resetPreventingPositions(map);
+                            Client.makeMove(source, position);
+                            selectedPiece = null;
+                        });
+                    });
+                } else {
+                    selectedPiece = piece;
+                    resetPreventingPositions(map);
+                    preventingPositions.forEach(position -> {
+                        position.removeActionListener(position);
+                        position.setBorder(new LineBorder(Color.GREEN, 4));
+                        position.addActionListener(event -> {
+                            Position source = piece.getPosition();
+                            piece.move(position);
+                            resetPreventingPositions(map);
+                            Client.makeMove(source, position);
+                            selectedPiece = null;
+                        });
+                    });
+                }
+
+            });
+        });
+    }
+
+    public static void resetPreventingPositions(Map<Piece, List<Position>> map) {
+        map.forEach((piece, preventingPositions) -> {
+            preventingPositions.forEach(position -> {
+                position.setBorder(null);
+                Arrays.stream(position.getActionListeners())
+                        .forEach(al -> position.removeActionListener(al));
+            });
+            Arrays.stream(piece.getPosition().getActionListeners())
+                    .forEach(al -> piece.getPosition().removeActionListener(al));
+        });
     }
 
 }

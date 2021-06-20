@@ -77,4 +77,7 @@ public class Position extends JButton implements ActionListener {
         }
 
     }
+
+    @Override
+    public String toString() { return "(" + row + ", " + column + "," + piece + ")";}
 }
