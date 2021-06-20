@@ -202,8 +202,6 @@ public class GameWindow extends JFrame {
 
         for (Piece piece : pieces) {
             piece.getPosition().removeActionListener(piece.getPosition());
-//            if (!map.containsKey(piece)) {
-//                piece.getPosition().removeActionListener(piece.getPosition() );
 //            }
         }
 
@@ -216,6 +214,8 @@ public class GameWindow extends JFrame {
                         position.setBorder(new LineBorder(Color.GREEN, 4));
                         position.addActionListener(event -> {
                             Position source = piece.getPosition();
+                            Arrays.stream(piece.getPosition().getActionListeners())
+                                    .forEach(al -> piece.getPosition().removeActionListener(al));
                             piece.move(position);
                             resetPreventingPositions(map);
                             Client.makeMove(source, position);
@@ -230,6 +230,8 @@ public class GameWindow extends JFrame {
                         position.setBorder(new LineBorder(Color.GREEN, 4));
                         position.addActionListener(event -> {
                             Position source = piece.getPosition();
+                            Arrays.stream(piece.getPosition().getActionListeners())
+                                    .forEach(al -> piece.getPosition().removeActionListener(al));
                             piece.move(position);
                             resetPreventingPositions(map);
                             Client.makeMove(source, position);
@@ -244,14 +246,42 @@ public class GameWindow extends JFrame {
 
     public static void resetPreventingPositions(Map<Piece, List<Position>> map) {
         map.forEach((piece, preventingPositions) -> {
+            Arrays.stream(piece.getPosition().getActionListeners())
+                    .forEach(al -> piece.getPosition().removeActionListener(al));
             preventingPositions.forEach(position -> {
                 position.setBorder(null);
                 Arrays.stream(position.getActionListeners())
                         .forEach(al -> position.removeActionListener(al));
             });
-            Arrays.stream(piece.getPosition().getActionListeners())
-                    .forEach(al -> piece.getPosition().removeActionListener(al));
         });
+    }
+
+    public static boolean tryMove(Piece piece, Position destination) {
+
+        boolean moved = false;
+        if (piece instanceof Pawn) {
+            moved = ((Pawn) piece).hasMoved();
+        }
+
+        boolean valid = true;
+
+        Position source = piece.getPosition();
+        var optionalPiece = destination.getPiece();
+
+        piece.move(destination);
+
+        if (calculateIfInDanger()) {
+            valid = false;
+        }
+
+        piece.move(source);
+        optionalPiece.ifPresent(p -> p.move(destination));
+
+        if (piece instanceof Pawn) {
+            ((Pawn) piece).setMoved(moved);
+        }
+
+        return valid;
     }
 
 }
