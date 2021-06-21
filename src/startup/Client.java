@@ -25,6 +25,7 @@ public class Client {
 
     public static boolean isWhite() { return isWhite; }
     public static void setIsWhite(boolean flag) { isWhite = flag; }
+    public static String getOpponentUsername() { return opponentUsername; }
 
     public static void main(String[] args) {
 
@@ -108,6 +109,7 @@ public class Client {
                     Piece piece = source.getPiece().get();
                     piece.move(destination);
                     onMove = true;
+                    GameWindow.pushMoveToHistory(piece, source, destination);
                     GameWindow.toggleActionListener(onMove);
                     /* if check */
                     if (GameWindow.calculateIfInDanger()) {

@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
+
 public class GameWindow extends JFrame {
 
     JPanel pane;
@@ -21,9 +23,14 @@ public class GameWindow extends JFrame {
     static Piece selectedPiece;
     static java.util.List<Position> availablePositions;
 
+    static DefaultListModel<String> dlm = new DefaultListModel<>();
+    static JList<String> movesHistory = new JList<>(dlm);
+    static JLabel turnLabel;
+
     public GameWindow() {
         setTitle("Chess game");
-        setSize(900, 700);
+        setLayout(new FlowLayout());
+        setSize(1300, 700);
         setResizable(false);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -43,12 +50,34 @@ public class GameWindow extends JFrame {
 
         pane = new JPanel();
         pane.setLayout(new GridLayout(8, 8));
+        pane.setPreferredSize(new Dimension(900, 600));
+        pane.setMaximumSize(new Dimension(900, 600));
 
         positions = new ArrayList<>();
 
         populateBoard();
 
         add(pane);
+
+        JPanel informationPane = new JPanel();
+        informationPane.setPreferredSize(new Dimension(250, 600));
+        informationPane.setMaximumSize(new Dimension(250, 600));
+        informationPane.setLayout(new BoxLayout(informationPane, BoxLayout.Y_AXIS));
+        informationPane.setBackground(Color.GRAY);
+        turnLabel = new JLabel("Your move");
+        turnLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JLabel historyLabel = new JLabel("Moves history");
+        historyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        informationPane.add(turnLabel);
+        informationPane.add(historyLabel);
+        dlm = new DefaultListModel<>();
+        movesHistory = new JList<>(dlm);
+        movesHistory.setFixedCellHeight(25);
+        JScrollPane scrollPane = new JScrollPane(movesHistory, VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+        informationPane.add(scrollPane);
+
+        add(informationPane);
     }
 
     private void populateBoard() {
@@ -120,7 +149,7 @@ public class GameWindow extends JFrame {
                 }
 
                 Color fieldColor = (col - 'a' + row - 1) % 2 == 0 ? new Color(0x493323) : new Color(0xE1BC91);
-                Position position = new Position(p, col, row);
+                Position position = new Position(p, col, 9 - row); // subtract from 9 for reverse (8, 7, 6...)
                 position.setIcon(imageIcon);
                 position.setBackground(fieldColor);
 
@@ -196,6 +225,18 @@ public class GameWindow extends JFrame {
                 .findFirst()
                 .get();
         return king.isCheckMate();
+    }
+
+    public static void pushMoveToHistory(Piece piece, Position source, Position destination) {
+        String player = (piece.getColor() == Piece.PieceColor.White && Client.isWhite()) ||
+                (piece.getColor() == Piece.PieceColor.Black && !Client.isWhite()) ? "you" : Client.getOpponentUsername();
+        dlm.addElement(player + ": " + (piece instanceof Pawn ? "Pawn" : piece.getClass().getSimpleName()) + " from (" + source.getColumn() + ", " +
+                source.getRow() + ") to (" + destination.getColumn() + ", " + destination.getRow() + ")");
+    }
+
+    @Override
+    public Insets getInsets() {
+        return new Insets(50, 0, 10, 0);
     }
 
 }

@@ -51,6 +51,7 @@ public class Position extends JButton implements ActionListener {
                         && GameWindow.selectedPiece.tryMove(this)) {
                     Position source = GameWindow.selectedPiece.getPosition();
                     GameWindow.selectedPiece.move(this);
+                    GameWindow.pushMoveToHistory(GameWindow.selectedPiece, source, this);
                     Client.makeMove(source, this);
                     GameWindow.selectedPiece = null;
                     GameWindow.resetAvailablePositions();
@@ -75,6 +76,7 @@ public class Position extends JButton implements ActionListener {
                 if (GameWindow.availablePositions.contains(this) && GameWindow.selectedPiece.tryMove(this)) {
                     Position source = GameWindow.selectedPiece.getPosition();
                     GameWindow.selectedPiece.move(this);
+                    GameWindow.pushMoveToHistory(GameWindow.selectedPiece, source, this);
                     Client.makeMove(source, this);
                 }
                 GameWindow.resetAvailablePositions();
