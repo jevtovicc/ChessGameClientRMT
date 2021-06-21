@@ -57,8 +57,9 @@ public class ConnectingWindow extends JFrame {
 
     public void removePlayerFromList(String username) {
         dlm.removeElement(username);
-        if (dlm.size() == 0) {
-            btnSendRequest.setEnabled(false);
-        }
+    }
+
+    public void clearOnlinePlayersList() {
+        dlm.removeAllElements();
     }
 }

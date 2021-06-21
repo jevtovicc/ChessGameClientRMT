@@ -23,7 +23,6 @@ public class Client {
     static boolean onMove;
     static boolean isWhite;
 
-    public static boolean isInGame() { return opponentUsername != null; }
     public static boolean isWhite() { return isWhite; }
     public static void setIsWhite(boolean flag) { isWhite = flag; }
 
@@ -114,9 +113,24 @@ public class Client {
                     if (GameWindow.calculateIfInDanger()) {
                         /* check if checkmate */
                         if (GameWindow.calculateIfCheckmate()) {
-                            GUIController.showCheckmateDialog();
+                            sendGameOver();
                         }
                     }
+                }
+
+                if (messageFromServer.startsWith("GameWon")) {
+                    opponentUsername = null;
+                    GUIController.showWinningDialog();
+                }
+
+                if (messageFromServer.startsWith("GameLost")) {
+                    opponentUsername = null;
+                    GUIController.showLosingDialog();
+                }
+
+                if (messageFromServer.startsWith("OpponentDisconnected")) {
+                    opponentUsername = null;
+                    GUIController.showOpponentDisconnectedDialog();
                 }
 
             }
@@ -157,7 +171,7 @@ public class Client {
         outputToServer.println("InvitationReject@" + username + "," + sender);
     }
 
-    public static void disconnect() { outputToServer.println("quit"); }
+    public static void disconnect() { outputToServer.println("quit@" + opponentUsername); }
 
     public static void makeMove(Position source, Position destination) {
         onMove = false;
@@ -166,4 +180,7 @@ public class Client {
         outputToServer.println("MoveMade@" + opponentUsername + "," + source.getColumn() + ","
                 + source.getRow() + "," + destination.getColumn() + "," + destination.getRow());
     }
+
+    //@winner;loser
+    public static void sendGameOver() { outputToServer.println("GameOver@" + opponentUsername + ";" + username); }
 }

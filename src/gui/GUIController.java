@@ -28,11 +28,16 @@ public class GUIController implements Runnable{
 
     private static void showConnectingWindow() {
         loginWindow.setVisible(false);
+        if (gameWindow != null) {
+            gameWindow.setVisible(false);
+            gameWindow = null;
+        }
         connectingWindow.setVisible(true);
         Client.requestPlayersFromServer();
     }
 
     private static void showGameWindow() {
+        connectingWindow.clearOnlinePlayersList();
         gameWindow = new GameWindow();
         connectingWindow.setVisible(false);
         gameWindow.setVisible(true);
@@ -72,8 +77,19 @@ public class GUIController implements Runnable{
         JOptionPane.showMessageDialog(null, rejecter + " rejected your request. Try connecting with some other player or try again later", "Invitation rejected", JOptionPane.ERROR_MESSAGE);
     }
 
-    public static void showCheckmateDialog() {
-        JOptionPane.showMessageDialog(null, "Checkmate! You lost the game :(", "Checkmate alert", JOptionPane.INFORMATION_MESSAGE);
+    public static void showWinningDialog() {
+        JOptionPane.showConfirmDialog(null, "Congratulations! You won the game!", "Checkmate", JOptionPane.OK_CANCEL_OPTION);
+        showConnectingWindow();
+    }
+
+    public static void showLosingDialog() {
+        JOptionPane.showConfirmDialog(null, "You lost this game... Better luck next time!", "Checkmate", JOptionPane.OK_CANCEL_OPTION);
+        showConnectingWindow();
+    }
+
+    public static void showOpponentDisconnectedDialog() {
+        JOptionPane.showConfirmDialog(null, "Your opponent disconnected! You won this game!", "Opponent disconnected", JOptionPane.OK_CANCEL_OPTION);
+        showConnectingWindow();
     }
 
     public static void exitProgram() { System.exit(0); }

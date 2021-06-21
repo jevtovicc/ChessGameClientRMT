@@ -6,6 +6,8 @@ import piece.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,8 +25,21 @@ public class GameWindow extends JFrame {
         setTitle("Chess game");
         setSize(900, 700);
         setResizable(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (JOptionPane.showConfirmDialog(null,
+                        "Are you sure you want to close the application? If you do, you will lose this game!",
+                        "Close app",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+                    Client.disconnect();
+                }
+            }
+        });
 
         pane = new JPanel();
         pane.setLayout(new GridLayout(8, 8));
