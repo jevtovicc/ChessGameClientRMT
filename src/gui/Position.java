@@ -71,7 +71,7 @@ public class Position extends JButton implements ActionListener {
             }
         } else {
             if (GameWindow.selectedPiece != null) {
-                if (GameWindow.availablePositions.contains(this)) {
+                if (GameWindow.availablePositions.contains(this) && GameWindow.selectedPiece.tryMove(this)) {
                     Position source = GameWindow.selectedPiece.getPosition();
                     GameWindow.selectedPiece.move(this);
                     Client.makeMove(source, this);
