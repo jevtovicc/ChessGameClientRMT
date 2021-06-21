@@ -3,8 +3,11 @@ package gui;
 import startup.Client;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
+import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
 
 public class ConnectingWindow extends JFrame {
 
@@ -16,6 +19,7 @@ public class ConnectingWindow extends JFrame {
         setTitle("Connect with others");
         setSize(600, 400);
         setLocationRelativeTo(null);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         addWindowListener(new WindowAdapter() {
@@ -31,19 +35,32 @@ public class ConnectingWindow extends JFrame {
             }
         });
 
+
+
         JPanel pane = new JPanel();
-        pane.add(new JLabel("Online players you can play with"));
+        BoxLayout box = new BoxLayout(pane, BoxLayout.Y_AXIS);
+        pane.setLayout(box);
+
+        JLabel label = new JLabel("Online players you can play with");
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        pane.add(label);
 
         dlm = new DefaultListModel();
         onlinePlayersList = new JList<>(dlm);
         onlinePlayersList.addListSelectionListener(e ->
             btnSendRequest.setEnabled(!onlinePlayersList.isSelectionEmpty()));
+        onlinePlayersList.setFixedCellWidth(400);
+        onlinePlayersList.setFixedCellHeight(25);
 
-        pane.add(onlinePlayersList);
+        JScrollPane scrollPane = new JScrollPane(onlinePlayersList, VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setMaximumSize(new Dimension(450, 250));
+        scrollPane.setPreferredSize(new Dimension(450, 250));
+        pane.add(scrollPane);
 
         btnSendRequest = new JButton("Send request");
         btnSendRequest.setEnabled(false);
         btnSendRequest.addActionListener(e -> Client.sendGameRequest(onlinePlayersList.getSelectedValue()));
+        btnSendRequest.setAlignmentX(Component.CENTER_ALIGNMENT);
         pane.add(btnSendRequest);
 
         add(pane);

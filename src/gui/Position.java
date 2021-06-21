@@ -47,7 +47,8 @@ public class Position extends JButton implements ActionListener {
                     }
                 });
             } else {
-                if (GameWindow.selectedPiece.getColor() != piece.getColor() && GameWindow.availablePositions.contains(this)) {
+                if (GameWindow.selectedPiece.getColor() != piece.getColor() && GameWindow.availablePositions.contains(this)
+                        && GameWindow.selectedPiece.tryMove(this)) {
                     Position source = GameWindow.selectedPiece.getPosition();
                     GameWindow.selectedPiece.move(this);
                     Client.makeMove(source, this);
