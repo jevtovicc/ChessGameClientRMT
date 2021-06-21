@@ -115,11 +115,7 @@ public class Client {
                         /* check if checkmate */
                         if (GameWindow.calculateIfCheckmate()) {
                             GUIController.showCheckmateDialog();
-                        } else {
-                            GameWindow.func();
                         }
-                    } else {
-                        System.out.println("Not in danger");
                     }
                 }
 

@@ -32,6 +32,34 @@ public abstract class Piece {
         GameWindow.setPieceAt(this, destination.getColumn(), destination.getRow());
     }
 
+    public boolean tryMove(Position destination) {
+        boolean moved = false;
+        if (this instanceof Pawn) {
+            moved = ((Pawn) this).hasMoved();
+        }
+
+        boolean valid = true;
+
+        Position source = getPosition();
+        var optionalPiece = destination.getPiece();
+
+        move(destination);
+
+        if (GameWindow.calculateIfInDanger()) {
+            valid = false;
+        }
+
+        move(source);
+        optionalPiece.ifPresent(p -> p.move(destination));
+
+        if (this instanceof Pawn) {
+            ((Pawn) this).setMoved(moved);
+        }
+
+        return valid;
+    }
+
+
     public abstract List<Position> getAvailablePositions();
 
     @Override

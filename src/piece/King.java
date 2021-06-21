@@ -21,105 +21,81 @@ public class King extends Piece {
         if (currPosition.getRow() + 1 <= 8) {
             Position temp = GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() + 1);
             temp.getPiece()
-                .ifPresentOrElse(piece -> {
-                    if (piece.getColor() != getColor() && canMove(temp)) {
-                        positions.add(temp);
-                    }
-                }, () -> {
-                    if (canMove(temp))
-                        positions.add(temp);
-                });
+                    .ifPresentOrElse(piece -> {
+                        if (piece.getColor() != getColor()) {
+                            positions.add(temp);
+                        }
+                    }, () -> positions.add(temp));
         }
 
         if (currPosition.getRow() - 1 >= 1) {
             Position temp = GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() - 1);
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
-                        if (piece.getColor() != getColor() && canMove(temp)) {
+                        if (piece.getColor() != getColor()) {
                             positions.add(temp);
                         }
-                    }, () -> {
-                        if (canMove(temp))
-                            positions.add(temp);
-                    });
+                    }, () -> positions.add(temp));
         }
 
         if (currPosition.getColumn() + 1 <= 'h') {
             Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow());
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
-                        if (piece.getColor() != getColor() && canMove(temp)) {
+                        if (piece.getColor() != getColor()) {
                             positions.add(temp);
                         }
-                    }, () -> {
-                        if (canMove(temp))
-                            positions.add(temp);
-                    });
+                    }, () -> positions.add(temp));
         }
 
         if (currPosition.getColumn() - 1 >= 'a') {
             Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow());
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
-                        if (piece.getColor() != getColor() && canMove(temp)) {
+                        if (piece.getColor() != getColor()) {
                             positions.add(temp);
                         }
-                    }, () -> {
-                        if (canMove(temp))
-                            positions.add(temp);
-                    });
+                    }, () -> positions.add(temp));
         }
 
         if (currPosition.getRow() + 1 <= 8 && currPosition.getColumn() + 1 <= 'h') {
             Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow() + 1);
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
-                        if (piece.getColor() != getColor() && canMove(temp)) {
+                        if (piece.getColor() != getColor()) {
                             positions.add(temp);
                         }
-                    }, () -> {
-                        if (canMove(temp))
-                            positions.add(temp);
-                    });
+                    }, () -> positions.add(temp));
         }
 
         if (currPosition.getRow() + 1 <= 8 && currPosition.getColumn() - 1 >= 'a') {
             Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() + 1);
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
-                        if (piece.getColor() != getColor() && canMove(temp)) {
+                        if (piece.getColor() != getColor()) {
                             positions.add(temp);
                         }
-                    }, () -> {
-                        if (canMove(temp))
-                            positions.add(temp);
-                    });
+                    }, () -> positions.add(temp));
         }
 
         if (currPosition.getRow() - 1 >= 1 && currPosition.getColumn() + 1 <= 'h') {
             Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow() - 1);
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
-                        if (piece.getColor() != getColor() && canMove(temp)) {
+                        if (piece.getColor() != getColor()) {
                             positions.add(temp);
                         }
-                    }, () -> {
-                        if (canMove(temp))
-                            positions.add(temp);
-                    });
+                    }, () -> positions.add(temp));
         }
 
         if (currPosition.getRow() - 1 >= 1 && currPosition.getColumn() - 1 >= 'a') {
             Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() - 1);
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
-                        if (piece.getColor() != getColor() && canMove(temp)) {
+                        if (piece.getColor() != getColor()) {
                             positions.add(temp);
                         }
-                    }, () -> {
-                        if (canMove(temp))
-                            positions.add(temp);
-                    });
+                    }, () -> positions.add(temp));
         }
 
         return positions;
@@ -148,15 +124,7 @@ public class King extends Piece {
     }
 
 
-    public boolean isCheckMate() {
-        return getPreventingPositions().isEmpty();
-//        return GameWindow.positions.stream()
-//                .filter(p -> p.getPiece().isPresent() && p.getPiece().get().getColor() == getColor())
-//                .map(position -> position.getPiece().get())
-//                .collect(Collectors.toList())
-//                .stream()
-//                .noneMatch(piece -> !piece.getAvailablePositions().isEmpty());
-    }
+    public boolean isCheckMate() { return getPreventingPositions().isEmpty(); }
 
     public Map<Piece, List<Position>> getPreventingPositions() {
 
@@ -215,25 +183,5 @@ public class King extends Piece {
         }
 
         return map;
-    }
-
-
-    private boolean canMove(Position destination) {
-
-        boolean valid = true;
-
-        Position source = getPosition();
-        var optionalPiece = destination.getPiece();
-
-        move(destination);
-
-        if (isInDanger()) {
-            valid = false;
-        }
-
-        move(source);
-        optionalPiece.ifPresent(piece -> piece.move(destination));
-
-        return valid;
     }
 }

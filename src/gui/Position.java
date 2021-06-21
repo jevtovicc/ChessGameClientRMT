@@ -39,7 +39,7 @@ public class Position extends JButton implements ActionListener {
                 GameWindow.selectedPiece = piece;
                 GameWindow.availablePositions = piece.getAvailablePositions();
                 GameWindow.availablePositions.forEach(avPos -> {
-                    if (GameWindow.tryMove(GameWindow.selectedPiece, avPos)) {
+                    if (GameWindow.selectedPiece.tryMove(avPos)) {
                         avPos.setBorder(new LineBorder(Color.GREEN, 4));
                         if (avPos.getActionListeners().length == 0) {
                             avPos.addActionListener(avPos);
@@ -58,7 +58,7 @@ public class Position extends JButton implements ActionListener {
                     GameWindow.selectedPiece = piece;
                     GameWindow.availablePositions = piece.getAvailablePositions();
                     GameWindow.availablePositions.forEach(avPos -> {
-                        if (GameWindow.tryMove(GameWindow.selectedPiece, avPos)) {
+                        if (GameWindow.selectedPiece.tryMove(avPos)) {
                             avPos.setBorder(new LineBorder(Color.GREEN, 4));
                             if (avPos.getActionListeners().length == 0) {
                                 avPos.addActionListener(avPos);
