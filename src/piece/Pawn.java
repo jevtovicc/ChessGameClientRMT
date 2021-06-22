@@ -12,7 +12,7 @@ public abstract class Pawn extends Piece {
         super(c, pngFilePath);
     }
 
-    public abstract List<Position> getAvailablePositions();
+    public abstract List<Position> calculateAvailablePositions();
 
     public boolean hasMoved() { return moved; }
     public void setMoved(boolean moved) { this.moved = moved; }

@@ -11,7 +11,7 @@ import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
 
 public class ConnectingWindow extends JFrame {
 
-    DefaultListModel dlm;
+    DefaultListModel<String> dlm;
     JList<String> onlinePlayersList;
     JButton btnSendRequest;
 
@@ -36,7 +36,6 @@ public class ConnectingWindow extends JFrame {
         });
 
 
-
         JPanel pane = new JPanel();
         BoxLayout box = new BoxLayout(pane, BoxLayout.Y_AXIS);
         pane.setLayout(box);
@@ -45,7 +44,7 @@ public class ConnectingWindow extends JFrame {
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         pane.add(label);
 
-        dlm = new DefaultListModel();
+        dlm = new DefaultListModel<>();
         onlinePlayersList = new JList<>(dlm);
         onlinePlayersList.addListSelectionListener(e ->
             btnSendRequest.setEnabled(!onlinePlayersList.isSelectionEmpty()));

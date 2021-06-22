@@ -103,18 +103,18 @@ public class Client {
                     char destCol = infos[2].charAt(0);
                     int destRow = Integer.parseInt(infos[3]);
 
-                    Position source = GameWindow.getPositionAt(srcCol, srcRow);
-                    Position destination = GameWindow.getPositionAt(destCol, destRow);
+                    Position source = GameWindow.getBoardPane().getPositionAt(srcCol, srcRow);
+                    Position destination = GameWindow.getBoardPane().getPositionAt(destCol, destRow);
 
                     Piece piece = source.getPiece().get();
                     piece.move(destination);
                     onMove = true;
-                    GameWindow.pushMoveToHistory(piece, source, destination);
-                    GameWindow.toggleActionListener(onMove);
+                    GameWindow.getHistoryPane().pushMoveToHistory(piece, source, destination);
+                    GameWindow.getBoardPane().toggleActionListeners(true);
                     /* if check */
-                    if (GameWindow.calculateIfInDanger()) {
+                    if (GameWindow.getBoardPane().calculateIfInDanger()) {
                         /* check if checkmate */
-                        if (GameWindow.calculateIfCheckmate()) {
+                        if (GameWindow.getBoardPane().calculateIfCheckmate()) {
                             sendGameOver();
                         }
                     }
@@ -177,8 +177,8 @@ public class Client {
 
     public static void makeMove(Position source, Position destination) {
         onMove = false;
-        GameWindow.toggleActionListener(onMove);
-        // opponentUsename, src-col,src-row,dest-col,dest-row
+        GameWindow.getBoardPane().toggleActionListeners(false);
+        // opponentUsername, src-col,src-row,dest-col,dest-row
         outputToServer.println("MoveMade@" + opponentUsername + "," + source.getColumn() + ","
                 + source.getRow() + "," + destination.getColumn() + "," + destination.getRow());
     }

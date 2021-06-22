@@ -13,32 +13,32 @@ public class Knight extends Piece {
     }
 
     @Override
-    public List<Position> getAvailablePositions() {
+    public List<Position> calculateAvailablePositions() {
 
-        List<Position> positions = new ArrayList<>();
+        availablePositions = new ArrayList<>();
 
         Position currPosition = getPosition();
 
         if (currPosition.getRow() + 2 <= 8) {
 
             if (currPosition.getColumn() - 1 >= 'a') {
-                Position position = GameWindow.getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() + 2);
+                Position position = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() + 2);
                 position.getPiece()
                 .ifPresentOrElse(curr -> {
                     if (curr.getColor() != getColor()) {
-                        positions.add(position);
+                        availablePositions.add(position);
                     }
-                }, () -> positions.add(position));
+                }, () -> availablePositions.add(position));
             }
 
             if (currPosition.getColumn() + 1 <= 'h') {
-                Position position = GameWindow.getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow() + 2);
+                Position position = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow() + 2);
                 position.getPiece()
                         .ifPresentOrElse(curr -> {
                             if (curr.getColor() != getColor()) {
-                                positions.add(position);
+                                availablePositions.add(position);
                             }
-                        }, () -> positions.add(position));
+                        }, () -> availablePositions.add(position));
             }
 
         }
@@ -46,23 +46,23 @@ public class Knight extends Piece {
         if (currPosition.getRow() - 2 >= 1) {
 
             if (currPosition.getColumn() - 1 >= 'a') {
-                Position position = GameWindow.getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() - 2);
+                Position position = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() - 2);
                 position.getPiece()
                         .ifPresentOrElse(curr -> {
                             if (curr.getColor() != getColor()) {
-                                positions.add(position);
+                                availablePositions.add(position);
                             }
-                        }, () -> positions.add(position));
+                        }, () -> availablePositions.add(position));
             }
 
             if (currPosition.getColumn() + 1 <= 'h') {
-                Position position = GameWindow.getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow() - 2);
+                Position position = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow() - 2);
                 position.getPiece()
                         .ifPresentOrElse(curr -> {
                             if (curr.getColor() != getColor()) {
-                                positions.add(position);
+                                availablePositions.add(position);
                             }
-                        }, () -> positions.add(position));
+                        }, () -> availablePositions.add(position));
             }
 
         }
@@ -70,23 +70,23 @@ public class Knight extends Piece {
         if (currPosition.getColumn() + 2 <= 'h') {
 
             if (currPosition.getRow() + 1 <= 8) {
-                Position position = GameWindow.getPositionAt((char)(currPosition.getColumn() + 2), currPosition.getRow() + 1);
+                Position position = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() + 2), currPosition.getRow() + 1);
                 position.getPiece()
                         .ifPresentOrElse(curr -> {
                             if (curr.getColor() != getColor()) {
-                                positions.add(position);
+                                availablePositions.add(position);
                             }
-                        }, () -> positions.add(position));
+                        }, () -> availablePositions.add(position));
             }
 
             if (currPosition.getRow() - 1 >= 1) {
-                Position position = GameWindow.getPositionAt((char)(currPosition.getColumn() + 2), currPosition.getRow() - 1);
+                Position position = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() + 2), currPosition.getRow() - 1);
                 position.getPiece()
                         .ifPresentOrElse(curr -> {
                             if (curr.getColor() != getColor()) {
-                                positions.add(position);
+                                availablePositions.add(position);
                             }
-                        }, () -> positions.add(position));
+                        }, () -> availablePositions.add(position));
             }
 
         }
@@ -94,27 +94,27 @@ public class Knight extends Piece {
         if (currPosition.getColumn() - 2 >= 'a') {
 
             if (currPosition.getRow() + 1 <= 8) {
-                Position position = GameWindow.getPositionAt((char)(currPosition.getColumn() - 2), currPosition.getRow() + 1);
+                Position position = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() - 2), currPosition.getRow() + 1);
                 position.getPiece()
                         .ifPresentOrElse(curr -> {
                             if (curr.getColor() != getColor()) {
-                                positions.add(position);
+                                availablePositions.add(position);
                             }
-                        }, () -> positions.add(position));
+                        }, () -> availablePositions.add(position));
             }
 
             if (currPosition.getRow() - 1 >= 1) {
-                Position position = GameWindow.getPositionAt((char)(currPosition.getColumn() - 2), currPosition.getRow() - 1);
+                Position position = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() - 2), currPosition.getRow() - 1);
                 position.getPiece()
                         .ifPresentOrElse(curr -> {
                             if (curr.getColor() != getColor()) {
-                                positions.add(position);
+                                availablePositions.add(position);
                             }
-                        }, () -> positions.add(position));
+                        }, () -> availablePositions.add(position));
             }
 
         }
 
-        return positions;
+        return availablePositions;
     }
 }

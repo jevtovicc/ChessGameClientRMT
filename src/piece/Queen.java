@@ -12,25 +12,25 @@ public class Queen extends Piece {
     }
 
     @Override
-    public List<Position> getAvailablePositions() {
+    public List<Position> calculateAvailablePositions() {
 
-        List<Position> positions = new ArrayList<>();
+        availablePositions = new ArrayList<>();
 
         Position currPosition = getPosition();
 
         int rowIncrement = 1, colIncrement = 1;
 
         while (currPosition.getRow() + rowIncrement <= 8 && currPosition.getColumn() + colIncrement <= 'h') {
-            Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() + colIncrement), currPosition.getRow() + rowIncrement);
+            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() + colIncrement), currPosition.getRow() + rowIncrement);
 
             // break if obstacle piece is found
             if (temp.getPiece().isPresent()) {
                 if (temp.getPiece().get().getColor() != getColor()) {
-                    positions.add(temp);
+                    availablePositions.add(temp);
                 }
                 break;
             } else {
-                positions.add(temp);
+                availablePositions.add(temp);
             }
 
             rowIncrement++;
@@ -41,16 +41,16 @@ public class Queen extends Piece {
         colIncrement = 1;
 
         while (currPosition.getRow() + rowIncrement <= 8 && currPosition.getColumn() - colIncrement >= 'a') {
-            Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() - colIncrement), currPosition.getRow() + rowIncrement);
+            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() - colIncrement), currPosition.getRow() + rowIncrement);
 
             // break if obstacle piece is found
             if (temp.getPiece().isPresent()) {
                 if (temp.getPiece().get().getColor() != getColor()) {
-                    positions.add(temp);
+                    availablePositions.add(temp);
                 }
                 break;
             } else {
-                positions.add(temp);
+                availablePositions.add(temp);
             }
 
             rowIncrement++;
@@ -61,16 +61,16 @@ public class Queen extends Piece {
         colIncrement = 1;
 
         while (currPosition.getRow() - rowIncrement >= 1 && currPosition.getColumn() + colIncrement <= 'h') {
-            Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() + colIncrement), currPosition.getRow() - rowIncrement);
+            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() + colIncrement), currPosition.getRow() - rowIncrement);
 
             // break if obstacle piece is found
             if (temp.getPiece().isPresent()) {
                 if (temp.getPiece().get().getColor() != getColor()) {
-                    positions.add(temp);
+                    availablePositions.add(temp);
                 }
                 break;
             } else {
-                positions.add(temp);
+                availablePositions.add(temp);
             }
 
             rowIncrement++;
@@ -81,16 +81,16 @@ public class Queen extends Piece {
         colIncrement = 1;
 
         while (currPosition.getRow() - rowIncrement >= 1 && currPosition.getColumn() - colIncrement >= 'a') {
-            Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() - colIncrement), currPosition.getRow() - rowIncrement);
+            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() - colIncrement), currPosition.getRow() - rowIncrement);
 
             // break if obstacle piece is found
             if (temp.getPiece().isPresent()) {
                 if (temp.getPiece().get().getColor() != getColor()) {
-                    positions.add(temp);
+                    availablePositions.add(temp);
                 }
                 break;
             } else {
-                positions.add(temp);
+                availablePositions.add(temp);
             }
 
             rowIncrement++;
@@ -100,14 +100,14 @@ public class Queen extends Piece {
         rowIncrement = 1;
 
         while (currPosition.getRow() + rowIncrement <= 8) {
-            Position temp = GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() + rowIncrement);
+            Position temp = GameWindow.getBoardPane().getPositionAt(currPosition.getColumn(), currPosition.getRow() + rowIncrement);
             if (temp.getPiece().isPresent()) {
                 if (temp.getPiece().get().getColor() != getColor()) {
-                    positions.add(temp);
+                    availablePositions.add(temp);
                 }
                 break;
             } else {
-                positions.add(temp);
+                availablePositions.add(temp);
             }
             rowIncrement++;
         }
@@ -115,14 +115,14 @@ public class Queen extends Piece {
         rowIncrement = 1;
 
         while (currPosition.getRow() - rowIncrement >= 1) {
-            Position temp = GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() - rowIncrement);
+            Position temp = GameWindow.getBoardPane().getPositionAt(currPosition.getColumn(), currPosition.getRow() - rowIncrement);
             if (temp.getPiece().isPresent()) {
                 if (temp.getPiece().get().getColor() != getColor()) {
-                    positions.add(temp);
+                    availablePositions.add(temp);
                 }
                 break;
             } else {
-                positions.add(temp);
+                availablePositions.add(temp);
             }
             rowIncrement++;
         }
@@ -130,14 +130,14 @@ public class Queen extends Piece {
         colIncrement = 1;
 
         while (currPosition.getColumn() + colIncrement <= 'h') {
-            Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() + colIncrement), currPosition.getRow());
+            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() + colIncrement), currPosition.getRow());
             if (temp.getPiece().isPresent()) {
                 if (temp.getPiece().get().getColor() != getColor()) {
-                    positions.add(temp);
+                    availablePositions.add(temp);
                 }
                 break;
             } else {
-                positions.add(temp);
+                availablePositions.add(temp);
             }
             colIncrement++;
         }
@@ -145,18 +145,18 @@ public class Queen extends Piece {
         colIncrement = 1;
 
         while (currPosition.getColumn() - colIncrement >= 'a') {
-            Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() - colIncrement), currPosition.getRow());
+            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() - colIncrement), currPosition.getRow());
             if (temp.getPiece().isPresent()) {
                 if (temp.getPiece().get().getColor() != getColor()) {
-                    positions.add(temp);
+                    availablePositions.add(temp);
                 }
                 break;
             } else {
-                positions.add(temp);
+                availablePositions.add(temp);
             }
             colIncrement++;
         }
 
-        return positions;
+        return availablePositions;
     }
 }

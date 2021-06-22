@@ -9,6 +9,7 @@ public abstract class Piece {
     private PieceColor pieceColor;
     private Position position;
     private String pngFilePath;
+    protected List<Position> availablePositions;
 
     public enum PieceColor {
         White, Black
@@ -24,15 +25,17 @@ public abstract class Piece {
     public PieceColor getColor() { return pieceColor; }
     public Position getPosition() { return position; }
     public String getPngFilePath() { return pngFilePath; }
+    public List<Position> getAvailablePositions() { return availablePositions; }
 
     public void move(Position destination) {
         Position position = getPosition();
         position.setPiece(null); // set previous position to null
         position.setIcon(null);
-        GameWindow.setPieceAt(this, destination.getColumn(), destination.getRow());
+        GameWindow.getBoardPane().setPieceAt(this, destination.getColumn(), destination.getRow());
     }
 
     public boolean tryMove(Position destination) {
+
         boolean moved = false;
         if (this instanceof Pawn) {
             moved = ((Pawn) this).hasMoved();
@@ -41,16 +44,18 @@ public abstract class Piece {
         boolean valid = true;
 
         Position source = getPosition();
-        var optionalPiece = destination.getPiece();
+        Piece previousPiece = destination.getPiece().orElse(null);
 
         move(destination);
 
-        if (GameWindow.calculateIfInDanger()) {
+        if (GameWindow.getBoardPane().calculateIfInDanger()) {
             valid = false;
         }
 
         move(source);
-        optionalPiece.ifPresent(p -> p.move(destination));
+        if (previousPiece != null) {
+            previousPiece.move(destination);
+        }
 
         if (this instanceof Pawn) {
             ((Pawn) this).setMoved(moved);
@@ -59,8 +64,12 @@ public abstract class Piece {
         return valid;
     }
 
+    public void resetAvailablePositions() {
+        availablePositions.forEach(p -> p.setBorder(null));
+        availablePositions.clear();
+    }
 
-    public abstract List<Position> getAvailablePositions();
+    public abstract List<Position> calculateAvailablePositions();
 
     @Override
     public String toString() { return getColor() + "-" + getClass().getName(); }

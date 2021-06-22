@@ -13,108 +13,107 @@ public class King extends Piece {
     }
 
     @Override
-    public List<Position> getAvailablePositions() {
-        List<Position> positions = new ArrayList<>();
+    public List<Position> calculateAvailablePositions() {
+
+        availablePositions = new ArrayList<>();
 
         Position currPosition = getPosition();
 
         if (currPosition.getRow() + 1 <= 8) {
-            Position temp = GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() + 1);
+            Position temp = GameWindow.getBoardPane().getPositionAt(currPosition.getColumn(), currPosition.getRow() + 1);
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
                         if (piece.getColor() != getColor()) {
-                            positions.add(temp);
+                            availablePositions.add(temp);
                         }
-                    }, () -> positions.add(temp));
+                    }, () -> availablePositions.add(temp));
         }
 
         if (currPosition.getRow() - 1 >= 1) {
-            Position temp = GameWindow.getPositionAt(currPosition.getColumn(), currPosition.getRow() - 1);
+            Position temp = GameWindow.getBoardPane().getPositionAt(currPosition.getColumn(), currPosition.getRow() - 1);
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
                         if (piece.getColor() != getColor()) {
-                            positions.add(temp);
+                            availablePositions.add(temp);
                         }
-                    }, () -> positions.add(temp));
+                    }, () -> availablePositions.add(temp));
         }
 
         if (currPosition.getColumn() + 1 <= 'h') {
-            Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow());
+            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow());
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
                         if (piece.getColor() != getColor()) {
-                            positions.add(temp);
+                            availablePositions.add(temp);
                         }
-                    }, () -> positions.add(temp));
+                    }, () -> availablePositions.add(temp));
         }
 
         if (currPosition.getColumn() - 1 >= 'a') {
-            Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow());
+            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow());
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
                         if (piece.getColor() != getColor()) {
-                            positions.add(temp);
+                            availablePositions.add(temp);
                         }
-                    }, () -> positions.add(temp));
+                    }, () -> availablePositions.add(temp));
         }
 
         if (currPosition.getRow() + 1 <= 8 && currPosition.getColumn() + 1 <= 'h') {
-            Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow() + 1);
+            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow() + 1);
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
                         if (piece.getColor() != getColor()) {
-                            positions.add(temp);
+                            availablePositions.add(temp);
                         }
-                    }, () -> positions.add(temp));
+                    }, () -> availablePositions.add(temp));
         }
 
         if (currPosition.getRow() + 1 <= 8 && currPosition.getColumn() - 1 >= 'a') {
-            Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() + 1);
+            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() + 1);
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
                         if (piece.getColor() != getColor()) {
-                            positions.add(temp);
+                            availablePositions.add(temp);
                         }
-                    }, () -> positions.add(temp));
+                    }, () -> availablePositions.add(temp));
         }
 
         if (currPosition.getRow() - 1 >= 1 && currPosition.getColumn() + 1 <= 'h') {
-            Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow() - 1);
+            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow() - 1);
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
                         if (piece.getColor() != getColor()) {
-                            positions.add(temp);
+                            availablePositions.add(temp);
                         }
-                    }, () -> positions.add(temp));
+                    }, () -> availablePositions.add(temp));
         }
 
         if (currPosition.getRow() - 1 >= 1 && currPosition.getColumn() - 1 >= 'a') {
-            Position temp = GameWindow.getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() - 1);
+            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() - 1);
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
                         if (piece.getColor() != getColor()) {
-                            positions.add(temp);
+                            availablePositions.add(temp);
                         }
-                    }, () -> positions.add(temp));
+                    }, () -> availablePositions.add(temp));
         }
 
-        return positions;
+        return availablePositions;
     }
 
 
     public boolean isInDanger() {
         List<Piece> pieces =
-                GameWindow.positions.stream()
+                GameWindow.getBoardPane().getPositions().stream()
                         .filter(p -> p.getPiece().isPresent() && p.getPiece().get().getColor() != getColor())
                         .map(position -> position.getPiece().get())
                         .collect(Collectors.toList());
 
         for (var piece : pieces) {
-            if (piece instanceof King)
-                continue;
-            var availablePositions = piece.getAvailablePositions();
+            var availablePositions = piece.calculateAvailablePositions();
             for (var avPos : availablePositions) {
-                if (avPos.getPiece().isPresent() && avPos.getPiece().get().equals(this)) {
+                if (avPos.getPiece().orElse(null) == this) {
                     return true;
                 }
             }
@@ -128,7 +127,7 @@ public class King extends Piece {
 
     public Map<Piece, List<Position>> getPreventingPositions() {
 
-        List<Piece> pieces = GameWindow.positions.stream()
+        List<Piece> pieces = GameWindow.getBoardPane().getPositions().stream()
                 .filter(p -> p.getPiece().isPresent() && p.getPiece().get().getColor() == getColor())
                 .map(position -> position.getPiece().get())
                 .collect(Collectors.toList());
@@ -145,29 +144,20 @@ public class King extends Piece {
 
             Position previousPosition = piece.getPosition();
 
-            List<Position> availablePositions = piece.getAvailablePositions();
+            List<Position> availablePositions = piece.calculateAvailablePositions();
             List<Position> preventingPositions = new ArrayList<>();
 
             for (Position avPos : availablePositions) {
 
-                Piece previousPiece = null;
-
-                if (avPos.getPiece().isPresent()) {
-                    previousPiece = avPos.getPiece().get();
-                }
+                Piece previousPiece = avPos.getPiece().orElse(null);
 
                 piece.move(avPos);
 
                 if (!isInDanger()) {
-                    piece.move(previousPosition);
-                    if (previousPiece != null) {
-                        previousPiece.move(avPos);
-                    }
                     preventingPositions.add(avPos);
                 }
 
                 piece.move(previousPosition);
-
                 if (previousPiece != null) {
                     previousPiece.move(avPos);
                 }

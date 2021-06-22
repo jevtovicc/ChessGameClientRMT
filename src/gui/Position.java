@@ -32,35 +32,37 @@ public class Position extends JButton implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (piece != null) {
-            if (GameWindow.selectedPiece == null) {
+            if (GameWindow.getBoardPane().getSelectedPiece() == null) {
                 if ((Client.isWhite() && piece.getColor() == Piece.PieceColor.Black) || (!Client.isWhite() && piece.getColor() == Piece.PieceColor.White)) {
                     return;
                 }
-                GameWindow.selectedPiece = piece;
-                GameWindow.availablePositions = piece.getAvailablePositions();
-                GameWindow.availablePositions.forEach(avPos -> {
-                    if (GameWindow.selectedPiece.tryMove(avPos)) {
-                        avPos.setBorder(new LineBorder(Color.GREEN, 4));
-                        if (avPos.getActionListeners().length == 0) {
-                            avPos.addActionListener(avPos);
-                        }
-                    }
-                });
+                GameWindow.getBoardPane().setSelectedPiece(piece);
+                GameWindow.getBoardPane().getSelectedPiece().calculateAvailablePositions();
+                GameWindow.getBoardPane().getSelectedPiece()
+                        .getAvailablePositions()
+                        .forEach(avPos -> {
+                            if (GameWindow.getBoardPane().getSelectedPiece().tryMove(avPos)) {
+                                avPos.setBorder(new LineBorder(Color.GREEN, 4));
+                                if (avPos.getActionListeners().length == 0) {
+                                    avPos.addActionListener(avPos);
+                                }
+                            }
+                        });
             } else {
-                if (GameWindow.selectedPiece.getColor() != piece.getColor() && GameWindow.availablePositions.contains(this)
-                        && GameWindow.selectedPiece.tryMove(this)) {
-                    Position source = GameWindow.selectedPiece.getPosition();
-                    GameWindow.selectedPiece.move(this);
-                    GameWindow.pushMoveToHistory(GameWindow.selectedPiece, source, this);
+                if (GameWindow.getBoardPane().getSelectedPiece().getColor() != piece.getColor() && GameWindow.getBoardPane().getSelectedPiece().getAvailablePositions().contains(this)
+                        && GameWindow.getBoardPane().getSelectedPiece().tryMove(this)) {
+                    Position source = GameWindow.getBoardPane().getSelectedPiece().getPosition();
+                    GameWindow.getBoardPane().getSelectedPiece().move(this);
+                    GameWindow.getHistoryPane().pushMoveToHistory(GameWindow.getBoardPane().getSelectedPiece(), source, this);
                     Client.makeMove(source, this);
-                    GameWindow.selectedPiece = null;
-                    GameWindow.resetAvailablePositions();
-                } else if (GameWindow.selectedPiece.getColor() == piece.getColor()) {
-                    GameWindow.resetAvailablePositions();
-                    GameWindow.selectedPiece = piece;
-                    GameWindow.availablePositions = piece.getAvailablePositions();
-                    GameWindow.availablePositions.forEach(avPos -> {
-                        if (GameWindow.selectedPiece.tryMove(avPos)) {
+                    GameWindow.getBoardPane().getSelectedPiece().resetAvailablePositions();
+                    GameWindow.getBoardPane().setSelectedPiece(null);
+                } else if (GameWindow.getBoardPane().getSelectedPiece().getColor() == piece.getColor()) {
+                    GameWindow.getBoardPane().getSelectedPiece().resetAvailablePositions();
+                    GameWindow.getBoardPane().setSelectedPiece(piece);
+                    GameWindow.getBoardPane().getSelectedPiece().calculateAvailablePositions();
+                    GameWindow.getBoardPane().getSelectedPiece().getAvailablePositions().forEach(avPos -> {
+                        if (GameWindow.getBoardPane().getSelectedPiece().tryMove(avPos)) {
                             avPos.setBorder(new LineBorder(Color.GREEN, 4));
                             if (avPos.getActionListeners().length == 0) {
                                 avPos.addActionListener(avPos);
@@ -72,15 +74,15 @@ public class Position extends JButton implements ActionListener {
 
             }
         } else {
-            if (GameWindow.selectedPiece != null) {
-                if (GameWindow.availablePositions.contains(this) && GameWindow.selectedPiece.tryMove(this)) {
-                    Position source = GameWindow.selectedPiece.getPosition();
-                    GameWindow.selectedPiece.move(this);
-                    GameWindow.pushMoveToHistory(GameWindow.selectedPiece, source, this);
+            if (GameWindow.getBoardPane().getSelectedPiece() != null) {
+                if (GameWindow.getBoardPane().getSelectedPiece().getAvailablePositions().contains(this) && GameWindow.getBoardPane().getSelectedPiece().tryMove(this)) {
+                    Position source = GameWindow.getBoardPane().getSelectedPiece().getPosition();
+                    GameWindow.getBoardPane().getSelectedPiece().move(this);
+                    GameWindow.getHistoryPane().pushMoveToHistory(GameWindow.getBoardPane().getSelectedPiece(), source, this);
                     Client.makeMove(source, this);
                 }
-                GameWindow.resetAvailablePositions();
-                GameWindow.selectedPiece = null;
+                GameWindow.getBoardPane().getSelectedPiece().resetAvailablePositions();
+                GameWindow.getBoardPane().setSelectedPiece(null);
             }
         }
 
