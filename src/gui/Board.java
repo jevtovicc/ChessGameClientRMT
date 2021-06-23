@@ -17,9 +17,9 @@ public class Board extends JPanel {
     public void setSelectedPiece(Piece piece) { selectedPiece = piece; }
 
     public Board() {
-        setLayout(new GridLayout(8, 8));
-        setPreferredSize(new Dimension(900, 600));
-        setMaximumSize(new Dimension(900, 600));
+        setLayout(new GridLayout(10, 10));
+        setPreferredSize(new Dimension(1000, 600));
+        setMaximumSize(new Dimension(1000, 600));
 
         positions = new ArrayList<>();
         if (Client.isWhite())
@@ -29,7 +29,21 @@ public class Board extends JPanel {
 
     private void populateBoardWhite() {
 
+        JLabel emptyLabel = new JLabel("");
+        add(emptyLabel);
+        for (char col = 'a'; col <= 'h'; col++) {
+            JLabel colLabel = new JLabel(String.valueOf(col));
+            colLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            add(colLabel);
+        }
+        JLabel emptyLabel2 = new JLabel("");
+        add(emptyLabel2);
+
         for (int row = 8; row >= 1; row--) {
+
+            JLabel leftRowLabel = new JLabel(String.valueOf(row));
+            leftRowLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            add(leftRowLabel);
 
             for (char col = 'a'; col <= 'h'; col++) {
 
@@ -110,12 +124,40 @@ public class Board extends JPanel {
                 positions.add(position);
                 add(position);
             }
+
+            JLabel rightRowLabel = new JLabel(String.valueOf(row));
+            rightRowLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            add(rightRowLabel);
         }
+
+        JLabel emptyLabel3 = new JLabel("");
+        add(emptyLabel3);
+        for (char col = 'a'; col <= 'h'; col++) {
+            JLabel colLabel = new JLabel(String.valueOf(col));
+            colLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            add(colLabel);
+        }
+        JLabel emptyLabel4 = new JLabel("");
+        add(emptyLabel4);
     }
 
     private void populateBoardBlack() {
 
+        JLabel emptyLabel = new JLabel("");
+        add(emptyLabel);
+        for (char col = 'a'; col <= 'h'; col++) {
+            JLabel colLabel = new JLabel(String.valueOf(col));
+            colLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            add(colLabel);
+        }
+        JLabel emptyLabel2 = new JLabel("");
+        add(emptyLabel2);
+
         for (int row = 1; row <= 8; row++) {
+
+            JLabel leftRowLabel = new JLabel(String.valueOf(row));
+            leftRowLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            add(leftRowLabel);
 
             for (char col = 'a'; col <= 'h'; col++) {
 
@@ -196,7 +238,21 @@ public class Board extends JPanel {
                 positions.add(position);
                 add(position);
             }
+
+            JLabel rightRowLabel = new JLabel(String.valueOf(row));
+            rightRowLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            add(rightRowLabel);
         }
+
+        JLabel emptyLabel3 = new JLabel("");
+        add(emptyLabel3);
+        for (char col = 'a'; col <= 'h'; col++) {
+            JLabel colLabel = new JLabel(String.valueOf(col));
+            colLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            add(colLabel);
+        }
+        JLabel emptyLabel4 = new JLabel("");
+        add(emptyLabel4);
     }
 
 

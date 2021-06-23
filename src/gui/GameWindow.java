@@ -1,7 +1,6 @@
 package gui;
 
 import startup.Client;
-import piece.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +18,7 @@ public class GameWindow extends JFrame {
     public GameWindow() {
         setTitle(Client.isWhite() ? "Your move" : "Waiting for " + Client.getOpponentUsername() + " to make a move...");
         setLayout(new FlowLayout());
-        setSize(1300, 700);
+        setSize(1400, 700);
         setResizable(false);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
