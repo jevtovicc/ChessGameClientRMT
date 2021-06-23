@@ -1,6 +1,6 @@
 package piece;
 
-import gui.GameWindow;
+import gui.Board;
 import gui.Position;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ public class Rook extends Piece {
     }
 
     @Override
-    public List<Position> calculateAvailablePositions() {
+    public List<Position> calculateAvailablePositions(Board board) {
 
         availablePositions = new ArrayList<>();
 
@@ -21,7 +21,7 @@ public class Rook extends Piece {
         int rowIncrement = 1;
 
         while (currPosition.getRow() + rowIncrement <= 8) {
-            Position temp = GameWindow.getBoardPane().getPositionAt(currPosition.getColumn(), currPosition.getRow() + rowIncrement);
+            Position temp = board.getPositionAt(currPosition.getColumn(), currPosition.getRow() + rowIncrement);
             if (temp.getPiece().isPresent()) {
                 if (temp.getPiece().get().getColor() != getColor()) {
                     availablePositions.add(temp);
@@ -36,7 +36,7 @@ public class Rook extends Piece {
         rowIncrement = 1;
 
         while (currPosition.getRow() - rowIncrement >= 1) {
-            Position temp = GameWindow.getBoardPane().getPositionAt(currPosition.getColumn(), currPosition.getRow() - rowIncrement);
+            Position temp = board.getPositionAt(currPosition.getColumn(), currPosition.getRow() - rowIncrement);
             if (temp.getPiece().isPresent()) {
                 if (temp.getPiece().get().getColor() != getColor()) {
                     availablePositions.add(temp);
@@ -51,7 +51,7 @@ public class Rook extends Piece {
         int colIncrement = 1;
 
         while (currPosition.getColumn() + colIncrement <= 'h') {
-            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() + colIncrement), currPosition.getRow());
+            Position temp = board.getPositionAt((char)(currPosition.getColumn() + colIncrement), currPosition.getRow());
             if (temp.getPiece().isPresent()) {
                 if (temp.getPiece().get().getColor() != getColor()) {
                     availablePositions.add(temp);
@@ -66,7 +66,7 @@ public class Rook extends Piece {
         colIncrement = 1;
 
         while (currPosition.getColumn() - colIncrement >= 'a') {
-            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() - colIncrement), currPosition.getRow());
+            Position temp = board.getPositionAt((char)(currPosition.getColumn() - colIncrement), currPosition.getRow());
             if (temp.getPiece().isPresent()) {
                 if (temp.getPiece().get().getColor() != getColor()) {
                     availablePositions.add(temp);

@@ -1,5 +1,6 @@
 package piece;
 
+import gui.Board;
 import gui.GameWindow;
 import gui.Position;
 
@@ -34,7 +35,7 @@ public abstract class Piece {
         GameWindow.getBoardPane().setPieceAt(this, destination.getColumn(), destination.getRow());
     }
 
-    public boolean tryMove(Position destination) {
+    public boolean tryMove(Board board, Position destination) {
 
         boolean moved = false;
         if (this instanceof Pawn) {
@@ -48,7 +49,7 @@ public abstract class Piece {
 
         move(destination);
 
-        if (GameWindow.getBoardPane().calculateIfInDanger()) {
+        if (board.calculateIfInDanger()) {
             valid = false;
         }
 
@@ -69,7 +70,7 @@ public abstract class Piece {
         availablePositions.clear();
     }
 
-    public abstract List<Position> calculateAvailablePositions();
+    public abstract List<Position> calculateAvailablePositions(Board board);
 
     @Override
     public String toString() { return getColor() + "-" + getClass().getName(); }

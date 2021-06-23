@@ -1,6 +1,6 @@
 package piece;
 
-import gui.GameWindow;
+import gui.Board;
 import gui.Position;
 
 import java.util.ArrayList;
@@ -19,21 +19,21 @@ public class WhitePawn extends Pawn {
     }
 
     @Override
-    public List<Position> calculateAvailablePositions() {
+    public List<Position> calculateAvailablePositions(Board board) {
 
         availablePositions = new ArrayList<>();
 
         Position currPosition = getPosition();
 
         if (!hasMoved()) {
-            if (GameWindow.getBoardPane().getPositionAt(currPosition.getColumn(), currPosition.getRow() + 1).getPiece().isEmpty()
-                    && GameWindow.getBoardPane().getPositionAt(currPosition.getColumn(), currPosition.getRow() + 2).getPiece().isEmpty())
-                availablePositions.add(GameWindow.getBoardPane().getPositionAt(currPosition.getColumn(), currPosition.getRow() + 2));
+            if (board.getPositionAt(currPosition.getColumn(), currPosition.getRow() + 1).getPiece().isEmpty()
+                    && board.getPositionAt(currPosition.getColumn(), currPosition.getRow() + 2).getPiece().isEmpty())
+                availablePositions.add(board.getPositionAt(currPosition.getColumn(), currPosition.getRow() + 2));
         }
 
         if (currPosition.getRow() - 1 >= 1) {
             // straight by one position
-            Position destination = GameWindow.getBoardPane().getPositionAt(currPosition.getColumn(), currPosition.getRow() + 1);
+            Position destination = board.getPositionAt(currPosition.getColumn(), currPosition.getRow() + 1);
             if (destination.getPiece().isEmpty()) {
                 availablePositions.add(destination);
             }
@@ -41,7 +41,7 @@ public class WhitePawn extends Pawn {
             // diagonally to eat opposite piece
             if (currPosition.getColumn() - 1 >= 'a') {
                 // left diagonal
-                Position pos = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() + 1);
+                Position pos = board.getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() + 1);
                 pos.getPiece()
                         .ifPresent(currPiece -> {
                             if (currPiece.getColor() != getColor()) {
@@ -52,7 +52,7 @@ public class WhitePawn extends Pawn {
 
             if (currPosition.getColumn() + 1 <= 'h') {
                 // right diagonal
-                Position pos = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow() + 1);
+                Position pos = board.getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow() + 1);
                 pos.getPiece()
                         .ifPresent(currPiece -> {
                             if (currPiece.getColor() != getColor()) {

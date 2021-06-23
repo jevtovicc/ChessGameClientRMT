@@ -1,5 +1,6 @@
 package piece;
 
+import gui.Board;
 import gui.GameWindow;
 import gui.Position;
 
@@ -13,14 +14,14 @@ public class King extends Piece {
     }
 
     @Override
-    public List<Position> calculateAvailablePositions() {
+    public List<Position> calculateAvailablePositions(Board board) {
 
         availablePositions = new ArrayList<>();
 
         Position currPosition = getPosition();
 
         if (currPosition.getRow() + 1 <= 8) {
-            Position temp = GameWindow.getBoardPane().getPositionAt(currPosition.getColumn(), currPosition.getRow() + 1);
+            Position temp = board.getPositionAt(currPosition.getColumn(), currPosition.getRow() + 1);
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
                         if (piece.getColor() != getColor()) {
@@ -30,7 +31,7 @@ public class King extends Piece {
         }
 
         if (currPosition.getRow() - 1 >= 1) {
-            Position temp = GameWindow.getBoardPane().getPositionAt(currPosition.getColumn(), currPosition.getRow() - 1);
+            Position temp = board.getPositionAt(currPosition.getColumn(), currPosition.getRow() - 1);
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
                         if (piece.getColor() != getColor()) {
@@ -40,7 +41,7 @@ public class King extends Piece {
         }
 
         if (currPosition.getColumn() + 1 <= 'h') {
-            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow());
+            Position temp = board.getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow());
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
                         if (piece.getColor() != getColor()) {
@@ -50,7 +51,7 @@ public class King extends Piece {
         }
 
         if (currPosition.getColumn() - 1 >= 'a') {
-            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow());
+            Position temp = board.getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow());
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
                         if (piece.getColor() != getColor()) {
@@ -60,7 +61,7 @@ public class King extends Piece {
         }
 
         if (currPosition.getRow() + 1 <= 8 && currPosition.getColumn() + 1 <= 'h') {
-            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow() + 1);
+            Position temp = board.getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow() + 1);
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
                         if (piece.getColor() != getColor()) {
@@ -70,7 +71,7 @@ public class King extends Piece {
         }
 
         if (currPosition.getRow() + 1 <= 8 && currPosition.getColumn() - 1 >= 'a') {
-            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() + 1);
+            Position temp = board.getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() + 1);
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
                         if (piece.getColor() != getColor()) {
@@ -80,7 +81,7 @@ public class King extends Piece {
         }
 
         if (currPosition.getRow() - 1 >= 1 && currPosition.getColumn() + 1 <= 'h') {
-            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow() - 1);
+            Position temp = board.getPositionAt((char)(currPosition.getColumn() + 1), currPosition.getRow() - 1);
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
                         if (piece.getColor() != getColor()) {
@@ -90,7 +91,7 @@ public class King extends Piece {
         }
 
         if (currPosition.getRow() - 1 >= 1 && currPosition.getColumn() - 1 >= 'a') {
-            Position temp = GameWindow.getBoardPane().getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() - 1);
+            Position temp = board.getPositionAt((char)(currPosition.getColumn() - 1), currPosition.getRow() - 1);
             temp.getPiece()
                     .ifPresentOrElse(piece -> {
                         if (piece.getColor() != getColor()) {
@@ -103,15 +104,15 @@ public class King extends Piece {
     }
 
 
-    public boolean isInDanger() {
+    public boolean isInDanger(Board board) {
         List<Piece> pieces =
-                GameWindow.getBoardPane().getPositions().stream()
+                board.getPositions().stream()
                         .filter(p -> p.getPiece().isPresent() && p.getPiece().get().getColor() != getColor())
                         .map(position -> position.getPiece().get())
                         .collect(Collectors.toList());
 
         for (var piece : pieces) {
-            var availablePositions = piece.calculateAvailablePositions();
+            var availablePositions = piece.calculateAvailablePositions(board);
             for (var avPos : availablePositions) {
                 if (avPos.getPiece().orElse(null) == this) {
                     return true;
@@ -123,11 +124,11 @@ public class King extends Piece {
     }
 
 
-    public boolean isCheckMate() { return getPreventingPositions().isEmpty(); }
+    public boolean isCheckMate(Board board) { return getPreventingPositions(board).isEmpty(); }
 
-    public Map<Piece, List<Position>> getPreventingPositions() {
+    public Map<Piece, List<Position>> getPreventingPositions(Board board) {
 
-        List<Piece> pieces = GameWindow.getBoardPane().getPositions().stream()
+        List<Piece> pieces = board.getPositions().stream()
                 .filter(p -> p.getPiece().isPresent() && p.getPiece().get().getColor() == getColor())
                 .map(position -> position.getPiece().get())
                 .collect(Collectors.toList());
@@ -144,7 +145,7 @@ public class King extends Piece {
 
             Position previousPosition = piece.getPosition();
 
-            List<Position> availablePositions = piece.calculateAvailablePositions();
+            List<Position> availablePositions = piece.calculateAvailablePositions(board);
             List<Position> preventingPositions = new ArrayList<>();
 
             for (Position avPos : availablePositions) {
@@ -153,7 +154,7 @@ public class King extends Piece {
 
                 piece.move(avPos);
 
-                if (!isInDanger()) {
+                if (!isInDanger(board)) {
                     preventingPositions.add(avPos);
                 }
 

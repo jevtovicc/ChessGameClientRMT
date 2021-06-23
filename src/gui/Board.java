@@ -299,7 +299,7 @@ public class Board extends JPanel {
                 .filter(p -> p instanceof King)
                 .findFirst()
                 .get();
-        return king.isInDanger();
+        return king.isInDanger(this);
     }
 
     public boolean calculateIfCheckmate() {
@@ -310,7 +310,7 @@ public class Board extends JPanel {
                 .filter(p -> p instanceof King)
                 .findFirst()
                 .get();
-        return king.isCheckMate();
+        return king.isCheckMate(this);
     }
 
 }
