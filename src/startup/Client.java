@@ -15,13 +15,13 @@ import java.util.logging.Logger;
 
 public class Client {
 
-    static BufferedReader inputFromServer;
-    static PrintStream outputToServer;
-    static Socket connectionSocket;
-    static String username;
-    static String opponentUsername;
-    static boolean onMove;
-    static boolean isWhite;
+    private static BufferedReader inputFromServer;
+    private static PrintStream outputToServer;
+    private static Socket connectionSocket;
+    private static String username;
+    private static String opponentUsername;
+    private static boolean onMove;
+    private static boolean isWhite;
 
     public static boolean isWhite() { return isWhite; }
     public static void setIsWhite(boolean flag) { isWhite = flag; }
@@ -88,8 +88,8 @@ public class Client {
                 }
 
                 if (messageFromServer.startsWith("InvitationAccept")) {
-                    GUIController.showInvitationAccept();
                     opponentUsername = messageFromServer.split("@")[1];
+                    GUIController.showInvitationAccept();
                 }
 
                 if (messageFromServer.startsWith("InvitationReject")) {
@@ -109,6 +109,7 @@ public class Client {
                     Piece piece = source.getPiece().get();
                     piece.move(destination);
                     onMove = true;
+                    GUIController.changeGameWindowTitle(true);
                     GameWindow.getHistoryPane().pushMoveToHistory(piece, source, destination);
                     GameWindow.getBoardPane().toggleActionListeners(true);
                     /* if check */
@@ -178,6 +179,7 @@ public class Client {
     public static void makeMove(Position source, Position destination) {
         onMove = false;
         GameWindow.getBoardPane().toggleActionListeners(false);
+        GUIController.changeGameWindowTitle(false);
         // opponentUsername, src-col,src-row,dest-col,dest-row
         outputToServer.println("MoveMade@" + opponentUsername + "," + source.getColumn() + ","
                 + source.getRow() + "," + destination.getColumn() + "," + destination.getRow());

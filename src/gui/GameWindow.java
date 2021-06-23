@@ -17,7 +17,7 @@ public class GameWindow extends JFrame {
     public static Board getBoardPane() { return boardPane; }
 
     public GameWindow() {
-        setTitle("Chess game");
+        setTitle(Client.isWhite() ? "Your move" : "Waiting for " + Client.getOpponentUsername() + " to make a move...");
         setLayout(new FlowLayout());
         setSize(1300, 700);
         setResizable(false);
@@ -42,6 +42,10 @@ public class GameWindow extends JFrame {
 
         historyPane = new History();
         add(historyPane);
+    }
+
+    public void changeTitle(boolean onMove) {
+        setTitle(onMove ? "Your move" : "Waiting for " + Client.getOpponentUsername() + " to make a move...");
     }
 
     @Override

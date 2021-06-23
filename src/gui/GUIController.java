@@ -92,5 +92,9 @@ public class GUIController implements Runnable{
         showConnectingWindow();
     }
 
+    public static void changeGameWindowTitle(boolean onMove) {
+        gameWindow.changeTitle(onMove);
+    }
+
     public static void exitProgram() { System.exit(0); }
 }
