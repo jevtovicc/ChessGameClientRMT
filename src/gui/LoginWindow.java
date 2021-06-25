@@ -12,7 +12,7 @@ import java.awt.event.WindowEvent;
 
 public class LoginWindow extends JFrame {
 
-    private JTextField usernameTxtField;
+    private final JTextField usernameTxtField;
 
     public LoginWindow() {
         setTitle("Log in");

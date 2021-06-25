@@ -11,9 +11,9 @@ import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
 
 public class ConnectingWindow extends JFrame {
 
-    DefaultListModel<String> dlm;
-    JList<String> onlinePlayersList;
-    JButton btnSendRequest;
+    private final DefaultListModel<String> dlm;
+    private final JList<String> onlinePlayersList;
+    private JButton btnSendRequest;
 
     public ConnectingWindow() {
         setTitle("Connect with others");
@@ -46,6 +46,7 @@ public class ConnectingWindow extends JFrame {
 
         dlm = new DefaultListModel<>();
         onlinePlayersList = new JList<>(dlm);
+        /* if opponent is selected, enable send request button */
         onlinePlayersList.addListSelectionListener(e ->
             btnSendRequest.setEnabled(!onlinePlayersList.isSelectionEmpty()));
         onlinePlayersList.setFixedCellWidth(400);

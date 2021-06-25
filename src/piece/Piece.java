@@ -7,10 +7,10 @@ import gui.Position;
 import java.util.List;
 
 public abstract class Piece {
-    private PieceColor pieceColor;
+    private final PieceColor pieceColor;
     private Position position;
-    private String pngFilePath;
-    protected List<Position> availablePositions;
+    private final String pngFilePath; // icon
+    protected List<Position> availablePositions; // positions where piece can move based on board and piece's current position
 
     public enum PieceColor {
         White, Black
@@ -29,20 +29,22 @@ public abstract class Piece {
     public List<Position> getAvailablePositions() { return availablePositions; }
 
     public void move(Position destination) {
-        Position position = getPosition();
-        position.setPiece(null); // set previous position to null
-        position.setIcon(null);
+        Position previousPosition = getPosition();
+        previousPosition.setPiece(null); // set previous position's piece to null
+        previousPosition.setIcon(null); // remove icon from previous position
         GameWindow.getBoardPane().setPieceAt(this, destination.getColumn(), destination.getRow());
     }
 
+    /* return true if move to destination doesn't lead to check */
     public boolean tryMove(Board board, Position destination) {
 
+        /* if piece is pawn, keep track of it's previous moved property */
         boolean moved = false;
         if (this instanceof Pawn) {
             moved = ((Pawn) this).hasMoved();
         }
 
-        boolean valid = true;
+        boolean valid = true; // keeps track of whether or not this move is valid (doesn't lead to check)
 
         Position source = getPosition();
         Piece previousPiece = destination.getPiece().orElse(null);
@@ -53,11 +55,13 @@ public abstract class Piece {
             valid = false;
         }
 
+        /* reset tried move so it doesn't affect original board */
         move(source);
         if (previousPiece != null) {
             previousPiece.move(destination);
         }
 
+        /* reset pawn's moved property to previous value */
         if (this instanceof Pawn) {
             ((Pawn) this).setMoved(moved);
         }
@@ -65,11 +69,13 @@ public abstract class Piece {
         return valid;
     }
 
+    /* removes all highlighted borders and clears available positions list */
     public void resetAvailablePositions() {
         availablePositions.forEach(p -> p.setBorder(null));
         availablePositions.clear();
     }
 
+    /* each piece has it's own way of calculating available positions */
     public abstract List<Position> calculateAvailablePositions(Board board);
 
     @Override

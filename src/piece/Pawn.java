@@ -7,6 +7,7 @@ import java.util.List;
 
 public abstract class Pawn extends Piece {
 
+    /* if pawn hasn't moved from it's starting position, it can move up to 2 positions */
     private boolean moved;
 
     public Pawn(PieceColor c, String pngFilePath) {

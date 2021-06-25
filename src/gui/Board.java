@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class Board extends JPanel {
 
-    private final java.util.List<Position> positions;
-    private Piece selectedPiece;
+    private final java.util.List<Position> positions; /* positions on the board */
+    private Piece selectedPiece; /* currently selected piece that player wants to move */
 
     public java.util.List<Position> getPositions() { return positions; }
     public Piece getSelectedPiece() { return selectedPiece; }
@@ -22,6 +22,7 @@ public class Board extends JPanel {
         setMaximumSize(new Dimension(1000, 600));
 
         positions = new ArrayList<>();
+        /* populate board differently for different perspectives */
         if (Client.isWhite())
             populateBoardWhite();
         else populateBoardBlack();
@@ -29,6 +30,7 @@ public class Board extends JPanel {
 
     private void populateBoardWhite() {
 
+        /* filler label for upper left corner */
         JLabel emptyLabel = new JLabel("");
         add(emptyLabel);
         for (char col = 'a'; col <= 'h'; col++) {
@@ -36,6 +38,7 @@ public class Board extends JPanel {
             colLabel.setHorizontalAlignment(SwingConstants.CENTER);
             add(colLabel);
         }
+        /* filler label for upper right corner */
         JLabel emptyLabel2 = new JLabel("");
         add(emptyLabel2);
 
@@ -47,9 +50,10 @@ public class Board extends JPanel {
 
             for (char col = 'a'; col <= 'h'; col++) {
 
-                Piece p = null;
+                Piece piece = null;
                 ImageIcon imageIcon = null;
 
+                /* rows: 1, 2, 7 and 8 will be populated with pieces, others will be empty */
                 if (row == 1 || row == 2 || row == 7 || row == 8) {
 
                     Piece.PieceColor pieceColor = row == 1 || row == 2 ? Piece.PieceColor.White : Piece.PieceColor.Black;
@@ -57,72 +61,75 @@ public class Board extends JPanel {
                     switch (col) {
                         case 'a', 'h' -> {
                             if (row == 1 || row == 8) {
-                                p = new Rook(pieceColor, "resources/rook-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
+                                piece = new Rook(pieceColor, "resources/rook-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = pieceColor == Piece.PieceColor.Black ?
+                                piece = pieceColor == Piece.PieceColor.Black ?
                                         new BlackPawn(pieceColor, "resources/pawn-black.png") :
                                         new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
-                            imageIcon = new ImageIcon(p.getPngFilePath());
+                            imageIcon = new ImageIcon(piece.getPngFilePath());
                         }
                         case 'b', 'g' -> {
                             if (row == 1 || row == 8) {
-                                p = new Knight(pieceColor, "resources/knight-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
+                                piece = new Knight(pieceColor, "resources/knight-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = pieceColor == Piece.PieceColor.Black ?
+                                piece = pieceColor == Piece.PieceColor.Black ?
                                         new BlackPawn(pieceColor, "resources/pawn-black.png") :
                                         new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
-                            imageIcon = new ImageIcon(p.getPngFilePath());
+                            imageIcon = new ImageIcon(piece.getPngFilePath());
                         }
                         case 'c', 'f' -> {
                             if (row == 1 || row == 8) {
-                                p = new Bishop(pieceColor, "resources/bishop-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
+                                piece = new Bishop(pieceColor, "resources/bishop-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = pieceColor== Piece.PieceColor.Black ?
+                                piece = pieceColor== Piece.PieceColor.Black ?
                                         new BlackPawn(pieceColor, "resources/pawn-black.png") :
                                         new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
-                            imageIcon = new ImageIcon(p.getPngFilePath());
+                            imageIcon = new ImageIcon(piece.getPngFilePath());
                         }
                         case 'd' -> {
                             if (row == 1 || row == 8) {
-                                p = new Queen(pieceColor, "resources/queen-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
+                                piece = new Queen(pieceColor, "resources/queen-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = pieceColor == Piece.PieceColor.Black ?
+                                piece = pieceColor == Piece.PieceColor.Black ?
                                         new BlackPawn(pieceColor, "resources/pawn-black.png") :
                                         new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
-                            imageIcon = new ImageIcon(p.getPngFilePath());
+                            imageIcon = new ImageIcon(piece.getPngFilePath());
                         }
                         case 'e' -> {
                             if (row == 1 || row == 8) {
-                                p = new King(pieceColor, "resources/king-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
+                                piece = new King(pieceColor, "resources/king-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = pieceColor == Piece.PieceColor.Black ?
+                                piece = pieceColor == Piece.PieceColor.Black ?
                                         new BlackPawn(pieceColor, "resources/pawn-black.png") :
                                         new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
-                            imageIcon = new ImageIcon(p.getPngFilePath());
+                            imageIcon = new ImageIcon(piece.getPngFilePath());
                         }
-                        default -> p = null;
+                        default -> piece = null;
                     }
 
                 }
 
+                /* calculate field color with this formula */
                 Color fieldColor = (col - 'a' + row - 1) % 2 == 1 ? new Color(0x493323) : new Color(0xE1BC91);
-                Position position = new Position(p, col, row);
+                Position position = new Position(piece, col, row);
                 position.setIcon(imageIcon);
                 position.setBackground(fieldColor);
 
                 // setup initial state
-                if (Client.isWhite() && (p == null || p.getColor() == Piece.PieceColor.White || !Client.isWhite()))
+                if (Client.isWhite() && (piece == null || piece.getColor() == Piece.PieceColor.White || !Client.isWhite()))
                     position.addActionListener(position);
 
-                if (p != null) p.setPosition(position);
 
-                positions.add(position);
-                add(position);
+                if (piece != null)
+                    piece.setPosition(position);
+
+                positions.add(position); // add to positions list
+                add(position); // add to JPanel
             }
 
             JLabel rightRowLabel = new JLabel(String.valueOf(row));
@@ -130,6 +137,7 @@ public class Board extends JPanel {
             add(rightRowLabel);
         }
 
+        /* filler label for lower left corner */
         JLabel emptyLabel3 = new JLabel("");
         add(emptyLabel3);
         for (char col = 'a'; col <= 'h'; col++) {
@@ -137,12 +145,14 @@ public class Board extends JPanel {
             colLabel.setHorizontalAlignment(SwingConstants.CENTER);
             add(colLabel);
         }
+        /* filler label for lower right corner */
         JLabel emptyLabel4 = new JLabel("");
         add(emptyLabel4);
     }
 
     private void populateBoardBlack() {
 
+        /* filler label for upper left corner */
         JLabel emptyLabel = new JLabel("");
         add(emptyLabel);
         for (char col = 'a'; col <= 'h'; col++) {
@@ -150,6 +160,7 @@ public class Board extends JPanel {
             colLabel.setHorizontalAlignment(SwingConstants.CENTER);
             add(colLabel);
         }
+        /* filler label for upper right corner */
         JLabel emptyLabel2 = new JLabel("");
         add(emptyLabel2);
 
@@ -161,9 +172,10 @@ public class Board extends JPanel {
 
             for (char col = 'a'; col <= 'h'; col++) {
 
-                Piece p = null;
+                Piece piece = null;
                 ImageIcon imageIcon = null;
 
+                /* rows: 1, 2, 7 and 8 will be populated with pieces, others will be empty */
                 if (row == 1 || row == 2 || row == 7 || row == 8) {
 
                     Piece.PieceColor pieceColor = row == 1 || row == 2 ? Piece.PieceColor.White : Piece.PieceColor.Black;
@@ -171,72 +183,74 @@ public class Board extends JPanel {
                     switch (col) {
                         case 'a', 'h' -> {
                             if (row == 1 || row == 8) {
-                                p = new Rook(pieceColor, "resources/rook-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
+                                piece = new Rook(pieceColor, "resources/rook-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = pieceColor == Piece.PieceColor.Black ?
+                                piece = pieceColor == Piece.PieceColor.Black ?
                                         new BlackPawn(pieceColor, "resources/pawn-black.png") :
                                         new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
-                            imageIcon = new ImageIcon(p.getPngFilePath());
+                            imageIcon = new ImageIcon(piece.getPngFilePath());
                         }
                         case 'b', 'g' -> {
                             if (row == 1 || row == 8) {
-                                p = new Knight(pieceColor, "resources/knight-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
+                                piece = new Knight(pieceColor, "resources/knight-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = pieceColor == Piece.PieceColor.Black ?
+                                piece = pieceColor == Piece.PieceColor.Black ?
                                         new BlackPawn(pieceColor, "resources/pawn-black.png") :
                                         new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
-                            imageIcon = new ImageIcon(p.getPngFilePath());
+                            imageIcon = new ImageIcon(piece.getPngFilePath());
                         }
                         case 'c', 'f' -> {
                             if (row == 1 || row == 8) {
-                                p = new Bishop(pieceColor, "resources/bishop-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
+                                piece = new Bishop(pieceColor, "resources/bishop-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = pieceColor== Piece.PieceColor.Black ?
+                                piece = pieceColor== Piece.PieceColor.Black ?
                                         new BlackPawn(pieceColor, "resources/pawn-black.png") :
                                         new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
-                            imageIcon = new ImageIcon(p.getPngFilePath());
+                            imageIcon = new ImageIcon(piece.getPngFilePath());
                         }
                         case 'd' -> {
                             if (row == 1 || row == 8) {
-                                p = new Queen(pieceColor, "resources/queen-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
+                                piece = new Queen(pieceColor, "resources/queen-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = pieceColor == Piece.PieceColor.Black ?
+                                piece = pieceColor == Piece.PieceColor.Black ?
                                         new BlackPawn(pieceColor, "resources/pawn-black.png") :
                                         new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
-                            imageIcon = new ImageIcon(p.getPngFilePath());
+                            imageIcon = new ImageIcon(piece.getPngFilePath());
                         }
                         case 'e' -> {
                             if (row == 1 || row == 8) {
-                                p = new King(pieceColor, "resources/king-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
+                                piece = new King(pieceColor, "resources/king-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
                             } else {
-                                p = pieceColor == Piece.PieceColor.Black ?
+                                piece = pieceColor == Piece.PieceColor.Black ?
                                         new BlackPawn(pieceColor, "resources/pawn-black.png") :
                                         new WhitePawn(pieceColor, "resources/pawn-white.png");
                             }
-                            imageIcon = new ImageIcon(p.getPngFilePath());
+                            imageIcon = new ImageIcon(piece.getPngFilePath());
                         }
-                        default -> p = null;
+                        default -> piece = null;
                     }
 
                 }
 
+                /* calculate field color with this formula */
                 Color fieldColor = (col - 'a' + row - 1) % 2 == 1 ? new Color(0x493323) : new Color(0xE1BC91);
-                Position position = new Position(p, col, row);
+                Position position = new Position(piece, col, row);
                 position.setIcon(imageIcon);
                 position.setBackground(fieldColor);
 
                 // setup initial state
-                if (Client.isWhite() && (p == null || p.getColor() == Piece.PieceColor.White || !Client.isWhite()))
+                if (Client.isWhite() && (piece == null || piece.getColor() == Piece.PieceColor.White || !Client.isWhite()))
                     position.addActionListener(position);
 
-                if (p != null) p.setPosition(position);
+                if (piece != null)
+                    piece.setPosition(position);
 
-                positions.add(position);
-                add(position);
+                positions.add(position); // add to positions list
+                add(position); // add to JPanel
             }
 
             JLabel rightRowLabel = new JLabel(String.valueOf(row));
@@ -244,6 +258,7 @@ public class Board extends JPanel {
             add(rightRowLabel);
         }
 
+        /* filler label for lower left corner */
         JLabel emptyLabel3 = new JLabel("");
         add(emptyLabel3);
         for (char col = 'a'; col <= 'h'; col++) {
@@ -251,18 +266,21 @@ public class Board extends JPanel {
             colLabel.setHorizontalAlignment(SwingConstants.CENTER);
             add(colLabel);
         }
+        /* filler label for lower right corner */
         JLabel emptyLabel4 = new JLabel("");
         add(emptyLabel4);
     }
 
 
+    /* get position object based on column and row */
     public Position getPositionAt(char col, int row) {
         return positions.stream()
                 .filter(p -> p.getRow() == row && p.getColumn() == col)
                 .findFirst()
-                .get();
+                .get(); // get without is present is okay because column and row will be in range (a-h, 1-8)
     }
 
+    /* set piece at position that can be found based on column and row */
     public void setPieceAt(Piece piece, char col, int row) {
         Position position = getPositionAt(col, row);
         position.setPiece(piece);
@@ -270,6 +288,7 @@ public class Board extends JPanel {
         piece.setPosition(position);
     }
 
+    /* when player makes a move, disable action listeners on all positions while other player doesn't make his move */
     public void toggleActionListeners(boolean enabled) {
         for (Position position : positions) {
             position.getPiece()
@@ -291,6 +310,7 @@ public class Board extends JPanel {
         }
     }
 
+    /* find king that corresponds to player's color and call it's isInDanger method */
     public boolean calculateIfInDanger() {
         Piece.PieceColor pieceColor = Client.isWhite() ? Piece.PieceColor.White : Piece.PieceColor.Black;
         King king = (King) positions.stream()
@@ -302,6 +322,7 @@ public class Board extends JPanel {
         return king.isInDanger(this);
     }
 
+    /* find king that corresponds to player's color and call it's isCheckMate method */
     public boolean calculateIfCheckmate() {
         Piece.PieceColor pieceColor = Client.isWhite() ? Piece.PieceColor.White : Piece.PieceColor.Black;
         King king = (King) positions.stream()
@@ -309,7 +330,7 @@ public class Board extends JPanel {
                 .map(p -> p.getPiece().get())
                 .filter(p -> p instanceof King)
                 .findFirst()
-                .get();
+                .get(); // get without is present is okay because there will always be king on the board */
         return king.isCheckMate(this);
     }
 

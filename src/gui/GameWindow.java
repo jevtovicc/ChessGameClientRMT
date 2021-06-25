@@ -9,8 +9,8 @@ import java.awt.event.WindowEvent;
 
 public class GameWindow extends JFrame {
 
-    static Board boardPane;
-    static History historyPane;
+    private static Board boardPane;
+    private static History historyPane;
 
     public static History getHistoryPane() { return historyPane; }
     public static Board getBoardPane() { return boardPane; }
@@ -43,10 +43,12 @@ public class GameWindow extends JFrame {
         add(historyPane);
     }
 
+    /* toggle title based on which player is on the move */
     public void changeTitle(boolean onMove) {
         setTitle(onMove ? "Your move" : "Waiting for " + Client.getOpponentUsername() + " to make a move...");
     }
 
+    /* padding */
     @Override
     public Insets getInsets() {
         return new Insets(50, 0, 10, 0);

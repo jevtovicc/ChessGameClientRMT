@@ -78,17 +78,17 @@ public class GUIController implements Runnable{
     }
 
     public static void showWinningDialog() {
-        JOptionPane.showConfirmDialog(null, "Congratulations! You won the game!", "Checkmate", JOptionPane.OK_CANCEL_OPTION);
+        JOptionPane.showMessageDialog(null, "Checkmate! Congratulations, you won the game!");
         showConnectingWindow();
     }
 
     public static void showLosingDialog() {
-        JOptionPane.showConfirmDialog(null, "You lost this game... Better luck next time!", "Checkmate", JOptionPane.OK_CANCEL_OPTION);
+        JOptionPane.showMessageDialog(null, "Checkmate! You lost this game... Better luck next time!");
         showConnectingWindow();
     }
 
     public static void showOpponentDisconnectedDialog() {
-        JOptionPane.showConfirmDialog(null, "Your opponent disconnected! You won this game!", "Opponent disconnected", JOptionPane.OK_CANCEL_OPTION);
+        JOptionPane.showMessageDialog(null, "Your opponent disconnected! You won this game!");
         showConnectingWindow();
     }
 

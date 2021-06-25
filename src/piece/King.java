@@ -1,7 +1,6 @@
 package piece;
 
 import gui.Board;
-import gui.GameWindow;
 import gui.Position;
 
 import java.util.*;
@@ -104,7 +103,9 @@ public class King extends Piece {
     }
 
 
+    /* returns true if check (if there is piece of opposite color that contains this king in it's available positions list) */
     public boolean isInDanger(Board board) {
+        /* pieces of opposite color (opponent's pieces) */
         List<Piece> pieces =
                 board.getPositions().stream()
                         .filter(p -> p.getPiece().isPresent() && p.getPiece().get().getColor() != getColor())

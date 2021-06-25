@@ -20,7 +20,6 @@ public class Client {
     private static Socket connectionSocket;
     private static String username;
     private static String opponentUsername;
-    private static boolean onMove;
     private static boolean isWhite;
 
     public static boolean isWhite() { return isWhite; }
@@ -50,6 +49,7 @@ public class Client {
 
                 if (messageFromServer.startsWith("Username")) {
                     String status = messageFromServer.split("@")[1];
+                    /* OK indicates that username is unique */
                     if (status.startsWith("OK")) {
                         username = status.split(";")[1];
                         GUIController.loginSuccess();
@@ -61,13 +61,13 @@ public class Client {
                 else if (messageFromServer.startsWith("OnlinePlayers")) {
                     String[] parts = messageFromServer.split("@");
                     if (parts.length > 1) {
-                        String username = parts[1];
-                        GUIController.addPlayerToList(username);
+                        String usernames = parts[1]; // can be multiple usernames that are comma separated
+                        GUIController.addPlayerToList(usernames);
                     }
                 }
 
                 if (messageFromServer.startsWith("NewOnlinePlayer")) {
-                    String username = messageFromServer.split("@")[1];
+                    String username = messageFromServer.split("@")[1]; // single username
                     GUIController.addPlayerToList(username);
                 }
 
@@ -96,23 +96,24 @@ public class Client {
                     GUIController.showInvitationReject(messageFromServer.split("@")[1]);
                 }
 
+                /* synchronize opponent's move on this board */
                 if (messageFromServer.startsWith("MoveMade")) {
-                    String[] infos = messageFromServer.split("@")[1].split(",");
-                    char srcCol = infos[0].charAt(0);
-                    int srcRow = Integer.parseInt(infos[1]);
-                    char destCol = infos[2].charAt(0);
-                    int destRow = Integer.parseInt(infos[3]);
+                    /* parts format: srcCol,srcRow,destCol,destRow */
+                    String[] parts = messageFromServer.split("@")[1].split(",");
+                    char srcCol = parts[0].charAt(0);
+                    int srcRow = Integer.parseInt(parts[1]);
+                    char destCol = parts[2].charAt(0);
+                    int destRow = Integer.parseInt(parts[3]);
 
                     Position source = GameWindow.getBoardPane().getPositionAt(srcCol, srcRow);
                     Position destination = GameWindow.getBoardPane().getPositionAt(destCol, destRow);
 
                     Piece piece = source.getPiece().get();
                     piece.move(destination);
-                    onMove = true;
                     GUIController.changeGameWindowTitle(true);
                     GameWindow.getHistoryPane().pushMoveToHistory(piece, source, destination);
                     GameWindow.getBoardPane().toggleActionListeners(true);
-                    /* if check */
+                    /* if is check */
                     if (GameWindow.getBoardPane().calculateIfInDanger()) {
                         /* check if checkmate */
                         if (GameWindow.getBoardPane().calculateIfCheckmate()) {
@@ -177,7 +178,6 @@ public class Client {
     public static void disconnect() { outputToServer.println("quit@" + opponentUsername); }
 
     public static void makeMove(Position source, Position destination) {
-        onMove = false;
         GameWindow.getBoardPane().toggleActionListeners(false);
         GUIController.changeGameWindowTitle(false);
         // opponentUsername, src-col,src-row,dest-col,dest-row
