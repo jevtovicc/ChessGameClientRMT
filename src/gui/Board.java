@@ -38,7 +38,7 @@ public class Board extends JPanel {
         return positions.stream()
                 .filter(p -> p.getRow() == row && p.getColumn() == col)
                 .findFirst()
-                .get(); // get without is present is okay because column and row will be in range (a-h, 1-8)
+                .orElseThrow(IllegalArgumentException::new);
     }
 
     /* set piece at position that can be found based on column and row */
@@ -79,7 +79,7 @@ public class Board extends JPanel {
                 .map(p -> p.getPiece().get())
                 .filter(p -> p instanceof King)
                 .findFirst()
-                .get();
+                .orElseThrow(() -> new IllegalStateException("King is not found on board"));
         return king.isInDanger(this);
     }
 
@@ -91,7 +91,7 @@ public class Board extends JPanel {
                 .map(p -> p.getPiece().get())
                 .filter(p -> p instanceof King)
                 .findFirst()
-                .get(); // get without is present is okay because there will always be king on the board */
+                .orElseThrow(() -> new IllegalStateException("King is not found on board"));
         return king.isCheckMate(this);
     }
 

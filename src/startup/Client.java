@@ -18,7 +18,6 @@ public class Client {
     private static BufferedReader inputFromServer;
     private static PrintStream outputToServer;
     private static Socket connectionSocket;
-    private static String username;
     private static String opponentUsername;
     private static boolean isWhite;
 
@@ -45,13 +44,12 @@ public class Client {
                     break;
                 }
 
-                if (messageFromServer.startsWith("Goodbye")) break;
+                else if (messageFromServer.startsWith("Goodbye")) break;
 
-                if (messageFromServer.startsWith("Username")) {
+                else if (messageFromServer.startsWith("Username")) {
                     String status = messageFromServer.split("@")[1];
                     /* OK indicates that username is unique */
                     if (status.startsWith("OK")) {
-                        username = status.split(";")[1];
                         GUIController.loginSuccess();
                     } else if (status.startsWith("NOT_UNIQUE")) {
                         GUIController.loginFail();
@@ -66,17 +64,17 @@ public class Client {
                     }
                 }
 
-                if (messageFromServer.startsWith("NewOnlinePlayer")) {
+                else if (messageFromServer.startsWith("NewOnlinePlayer")) {
                     String username = messageFromServer.split("@")[1]; // single username
                     GUIController.addPlayerToList(username);
                 }
 
-                if (messageFromServer.startsWith("PlayerDisconnected")) {
+                else if (messageFromServer.startsWith("PlayerDisconnected")) {
                     String username = messageFromServer.split("@")[1];
                     GUIController.removePlayerFromList(username);
                 }
 
-                if (messageFromServer.startsWith("GameRequest")) {
+                else if (messageFromServer.startsWith("GameRequest")) {
                     String sender = messageFromServer.split("@")[1];
                     // if request was accepted
                     if (GUIController.showGameRequest(sender)) {
@@ -87,17 +85,17 @@ public class Client {
                     }
                 }
 
-                if (messageFromServer.startsWith("InvitationAccept")) {
+                else if (messageFromServer.startsWith("InvitationAccept")) {
                     opponentUsername = messageFromServer.split("@")[1];
                     GUIController.showInvitationAccept();
                 }
 
-                if (messageFromServer.startsWith("InvitationReject")) {
+                else if (messageFromServer.startsWith("InvitationReject")) {
                     GUIController.showInvitationReject(messageFromServer.split("@")[1]);
                 }
 
                 /* synchronize opponent's move on this board */
-                if (messageFromServer.startsWith("MoveMade")) {
+                else if (messageFromServer.startsWith("MoveMade")) {
                     /* parts format: srcCol,srcRow,destCol,destRow */
                     String[] parts = messageFromServer.split("@")[1].split(",");
                     char srcCol = parts[0].charAt(0);
@@ -108,7 +106,7 @@ public class Client {
                     Position source = GameWindow.getBoardPane().getPositionAt(srcCol, srcRow);
                     Position destination = GameWindow.getBoardPane().getPositionAt(destCol, destRow);
 
-                    Piece piece = source.getPiece().get();
+                    Piece piece = source.getPiece().orElseThrow(IllegalStateException::new);
                     piece.move(destination);
                     GUIController.changeGameWindowTitle(true);
                     GameWindow.getHistoryPane().pushMoveToHistory(piece, source, destination);
@@ -122,17 +120,17 @@ public class Client {
                     }
                 }
 
-                if (messageFromServer.startsWith("GameWon")) {
+                else if (messageFromServer.startsWith("GameWon")) {
                     opponentUsername = null;
                     GUIController.showWinningDialog();
                 }
 
-                if (messageFromServer.startsWith("GameLost")) {
+                else if (messageFromServer.startsWith("GameLost")) {
                     opponentUsername = null;
                     GUIController.showLosingDialog();
                 }
 
-                if (messageFromServer.startsWith("OpponentDisconnected")) {
+                else if (messageFromServer.startsWith("OpponentDisconnected")) {
                     opponentUsername = null;
                     GUIController.showOpponentDisconnectedDialog();
                 }
@@ -164,15 +162,15 @@ public class Client {
     public static void requestPlayersFromServer() { outputToServer.println("OnlinePlayers"); }
 
     public static void sendGameRequest(String receiver) {
-        outputToServer.println("GameRequest@" + username + "," + receiver);
+        outputToServer.println("GameRequest@" + receiver);
     }
 
     public static void acceptGameRequest() {
-        outputToServer.println("InvitationAccept@" + username + "," + opponentUsername);
+        outputToServer.println("InvitationAccept@" + opponentUsername);
     }
 
     public static void rejectGameRequest(String sender) {
-        outputToServer.println("InvitationReject@" + username + "," + sender);
+        outputToServer.println("InvitationReject@" + sender);
     }
 
     public static void disconnect() { outputToServer.println("quit@" + opponentUsername); }
@@ -185,6 +183,5 @@ public class Client {
                 + source.getRow() + "," + destination.getColumn() + "," + destination.getRow());
     }
 
-    //@winner;loser
-    public static void sendGameOver() { outputToServer.println("GameOver@" + opponentUsername + ";" + username); }
+    public static void sendGameOver() { outputToServer.println("GameOver"); }
 }
