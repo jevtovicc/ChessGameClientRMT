@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Rook extends Piece {
-    public Rook(PieceColor c, String pngFilePath) {
-        super(c, pngFilePath);
+    public Rook(PieceColor color) {
+        super(color, "resources/rook-" + (color == PieceColor.Black ? "black" : "white") + ".png");
     }
 
     @Override

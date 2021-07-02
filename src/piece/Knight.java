@@ -8,8 +8,8 @@ import java.util.List;
 
 public class Knight extends Piece {
 
-    public Knight(PieceColor c, String pngFilePath) {
-        super(c, pngFilePath);
+    public Knight(PieceColor color) {
+        super(color, "resources/knight-" + (color == PieceColor.Black ? "black" : "white") + ".png");
     }
 
     @Override

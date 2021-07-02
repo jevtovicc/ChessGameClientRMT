@@ -8,8 +8,8 @@ import java.util.List;
 
 public class Bishop extends Piece {
 
-    public Bishop(PieceColor c, String pngFilePath) {
-        super(c, pngFilePath);
+    public Bishop(PieceColor color) {
+        super(color, "resources/bishop-" + (color == PieceColor.Black ? "black" : "white") + ".png");
     }
 
     @Override

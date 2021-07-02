@@ -44,22 +44,25 @@ public class BlackBoardPopulator implements BoardPopulator {
 
                     if (row == 2 || row == 7) {
                         piece = (pieceColor == Piece.PieceColor.Black) ?
-                                new BlackPawn(pieceColor, "resources/pawn-black.png") :
-                                new WhitePawn(pieceColor, "resources/pawn-white.png");
+                                new BlackPawn() :
+                                new WhitePawn();
                     } else {
                         piece = switch (col) {
-                            case 'a', 'h' -> new Rook(pieceColor, "resources/rook-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
-                            case 'b', 'g' -> new Knight(pieceColor, "resources/knight-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
-                            case 'c', 'f' ->  new Bishop(pieceColor, "resources/bishop-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
-                            case 'd' -> new Queen(pieceColor, "resources/queen-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
-                            case 'e' -> new King(pieceColor, "resources/king-" + (pieceColor == Piece.PieceColor.Black ? "black" : "white") + ".png");
+                            case 'a', 'h' -> new Rook(pieceColor);
+                            case 'b', 'g' -> new Knight(pieceColor);
+                            case 'c', 'f' ->  new Bishop(pieceColor);
+                            case 'd' -> new Queen(pieceColor);
+                            case 'e' -> new King(pieceColor);
                             default -> null;
                         };
                     }
                 }
 
                 /* calculate field color with this formula */
-                Color fieldColor = (col - 'a' + row - 1) % 2 == 1 ? new Color(0x493323) : new Color(0xE1BC91);
+                Color fieldColor = (col - 'a' + row - 1) % 2 == 1 ?
+                        new Color(0x493323) :
+                        new Color(0xE1BC91);
+
                 Position position = new Position(piece, col, row);
                 position.setBackground(fieldColor);
 

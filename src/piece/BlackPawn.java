@@ -8,8 +8,8 @@ import java.util.List;
 
 public class BlackPawn extends Pawn {
 
-    public BlackPawn(PieceColor c, String pngFilePath) {
-        super(c, pngFilePath);
+    public BlackPawn() {
+        super(PieceColor.Black, "resources/pawn-black.png");
     }
 
     @Override

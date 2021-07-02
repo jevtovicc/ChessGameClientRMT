@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Queen extends Piece {
-    public Queen(PieceColor c, String pngFilePath) {
-        super(c, pngFilePath);
+    public Queen(PieceColor color) {
+        super(color, "resources/queen-" + (color == PieceColor.Black ? "black" : "white") + ".png");
     }
 
     @Override

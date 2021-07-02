@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 public class King extends Piece {
 
-    public King(Piece.PieceColor c, String pngFilePath) {
-        super(c, pngFilePath);
+    public King(PieceColor color) {
+        super(color, "resources/king-" + (color == PieceColor.Black ? "black" : "white") + ".png");
     }
 
     @Override

@@ -8,8 +8,8 @@ import java.util.List;
 
 public class WhitePawn extends Pawn {
 
-    public WhitePawn(PieceColor c, String pngFilePath) {
-        super(c, pngFilePath);
+    public WhitePawn() {
+        super(PieceColor.White, "resources/pawn-white.png");
     }
 
     @Override
