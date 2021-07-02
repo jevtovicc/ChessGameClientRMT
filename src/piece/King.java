@@ -124,17 +124,15 @@ public class King extends Piece {
         return false;
     }
 
-
-    public boolean isCheckMate(Board board) { return getPreventingPositions(board).isEmpty(); }
-
-    public Map<Piece, List<Position>> getPreventingPositions(Board board) {
+    /* returns true if player in danger has at least one move that gets him out of danger (out of check situation) */
+    public boolean isCheckMate(Board board) {
 
         List<Piece> pieces = board.getPositions().stream()
                 .filter(p -> p.getPiece().isPresent() && p.getPiece().get().getColor() == getColor())
                 .map(position -> position.getPiece().get())
                 .collect(Collectors.toList());
 
-        Map<Piece, List<Position>> map = new HashMap<>();
+        boolean preventingMoveFound = false;
 
         for (Piece piece : pieces) {
 
@@ -147,7 +145,6 @@ public class King extends Piece {
             Position previousPosition = piece.getPosition();
 
             List<Position> availablePositions = piece.calculateAvailablePositions(board);
-            List<Position> preventingPositions = new ArrayList<>();
 
             for (Position avPos : availablePositions) {
 
@@ -156,24 +153,26 @@ public class King extends Piece {
                 piece.move(avPos);
 
                 if (!isInDanger(board)) {
-                    preventingPositions.add(avPos);
+                    preventingMoveFound = true;
                 }
 
+                /* reset move made so it doesn't affect the original board */
                 piece.move(previousPosition);
                 if (previousPiece != null) {
                     previousPiece.move(avPos);
                 }
             }
 
+            /* if pawn, reset it's moved property to previous state */
             if (piece instanceof Pawn) {
                 ((Pawn) piece).setMoved(moved);
             }
 
-            if (!preventingPositions.isEmpty()) {
-                map.put(piece, preventingPositions);
-            }
+            if (preventingMoveFound) break;
+
         }
 
-        return map;
+        return !preventingMoveFound;
     }
+
 }

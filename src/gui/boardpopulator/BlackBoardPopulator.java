@@ -16,17 +16,21 @@ public class BlackBoardPopulator implements BoardPopulator {
         /* filler label for upper left corner */
         JLabel emptyLabel = new JLabel("");
         board.add(emptyLabel);
+
+        /* upper column labels */
         for (char col = 'a'; col <= 'h'; col++) {
             JLabel colLabel = new JLabel(String.valueOf(col));
             colLabel.setHorizontalAlignment(SwingConstants.CENTER);
             board.add(colLabel);
         }
+
         /* filler label for upper right corner */
         JLabel emptyLabel2 = new JLabel("");
         board.add(emptyLabel2);
 
         for (int row = 1; row <= 8; row++) {
 
+            /* row labels on left side */
             JLabel leftRowLabel = new JLabel(String.valueOf(row));
             leftRowLabel.setHorizontalAlignment(SwingConstants.CENTER);
             board.add(leftRowLabel);
@@ -53,7 +57,7 @@ public class BlackBoardPopulator implements BoardPopulator {
                             case 'c', 'f' ->  new Bishop(pieceColor);
                             case 'd' -> new Queen(pieceColor);
                             case 'e' -> new King(pieceColor);
-                            default -> null;
+                            default -> throw new IllegalStateException("Invalid column");
                         };
                     }
                 }
@@ -66,10 +70,6 @@ public class BlackBoardPopulator implements BoardPopulator {
                 Position position = new Position(piece, col, row);
                 position.setBackground(fieldColor);
 
-                // setup initial state
-                if (Client.isWhite() && (piece == null || piece.getColor() == Piece.PieceColor.White || !Client.isWhite()))
-                    position.addActionListener(position);
-
                 if (piece != null) {
                     position.setIcon(new ImageIcon(piece.getPngFilePath()));
                     piece.setPosition(position);
@@ -79,6 +79,7 @@ public class BlackBoardPopulator implements BoardPopulator {
                 board.add(position); // add to JPanel
             }
 
+            /* row labels on right side */
             JLabel rightRowLabel = new JLabel(String.valueOf(row));
             rightRowLabel.setHorizontalAlignment(SwingConstants.CENTER);
             board.add(rightRowLabel);
@@ -87,11 +88,14 @@ public class BlackBoardPopulator implements BoardPopulator {
         /* filler label for lower left corner */
         JLabel emptyLabel3 = new JLabel("");
         board.add(emptyLabel3);
+
+        /* lower column labels */
         for (char col = 'a'; col <= 'h'; col++) {
             JLabel colLabel = new JLabel(String.valueOf(col));
             colLabel.setHorizontalAlignment(SwingConstants.CENTER);
             board.add(colLabel);
         }
+
         /* filler label for lower right corner */
         JLabel emptyLabel4 = new JLabel("");
         board.add(emptyLabel4);

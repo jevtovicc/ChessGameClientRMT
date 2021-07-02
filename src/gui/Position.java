@@ -28,24 +28,24 @@ public class Position extends JButton implements ActionListener {
     public char getColumn() { return column; }
     public int getRow() { return row; }
 
+    private static Piece selectedPiece = null; // keeps track of currently selected piece
+
     @Override
     public void actionPerformed(ActionEvent e) {
+
         /* if position that is clicked has piece on it */
         if (piece != null) {
             /* if no piece is selected previously */
-            if (GameWindow.getBoardPane().getSelectedPiece() == null) {
-                if ((Client.isWhite() && piece.getColor() == Piece.PieceColor.Black) || (!Client.isWhite() && piece.getColor() == Piece.PieceColor.White)) {
-                    return;
-                }
-                GameWindow.getBoardPane().setSelectedPiece(piece);
-                GameWindow.getBoardPane().getSelectedPiece().calculateAvailablePositions(GameWindow.getBoardPane());
+            if (selectedPiece == null) {
+
+                selectedPiece = piece;
+                selectedPiece.calculateAvailablePositions(GameWindow.getBoardPane());
 
                 /* for each available position that doesn't lead to check, enable action listener and set border to green */
-                GameWindow.getBoardPane()
-                        .getSelectedPiece()
+                selectedPiece
                         .getAvailablePositions()
                         .stream()
-                        .filter(avPos -> GameWindow.getBoardPane().getSelectedPiece().tryMove(GameWindow.getBoardPane(), avPos))
+                        .filter(avPos -> piece.tryMove(GameWindow.getBoardPane(), avPos))
                         .forEach(avPos -> {
                             avPos.setBorder(new LineBorder(Color.GREEN, 4));
                             if (avPos.getActionListeners().length == 0) {
@@ -53,29 +53,30 @@ public class Position extends JButton implements ActionListener {
                             }
                         });
             }
+
             /* if there is already selected piece */
             else {
                 /* if piece that is clicked is opposite color and selected piece can move on that position */
-                if (GameWindow.getBoardPane().getSelectedPiece().getColor() != piece.getColor() && GameWindow.getBoardPane().getSelectedPiece().getAvailablePositions().contains(this)
-                        && GameWindow.getBoardPane().getSelectedPiece().tryMove(GameWindow.getBoardPane(), this)) {
-                    Position source = GameWindow.getBoardPane().getSelectedPiece().getPosition();
-                    GameWindow.getBoardPane().getSelectedPiece().move(this);
-                    GameWindow.getHistoryPane().pushMoveToHistory(GameWindow.getBoardPane().getSelectedPiece(), source, this);
+                if (selectedPiece.getColor() != piece.getColor()
+                        && selectedPiece.getAvailablePositions().contains(this)
+                        && selectedPiece.tryMove(GameWindow.getBoardPane(), this)) {
+                    Position source = selectedPiece.getPosition();
+                    selectedPiece.move(this);
+                    GameWindow.getHistoryPane().pushMoveToHistory(selectedPiece, source, this);
                     Client.makeMove(source, this);
-                    GameWindow.getBoardPane().getSelectedPiece().resetAvailablePositions();
-                    GameWindow.getBoardPane().setSelectedPiece(null);
+                    selectedPiece.resetAvailablePositions();
+                    selectedPiece = null;
                 }
                 /* if piece that is clicked is same color, update selected piece to clicked piece */
-                else if (GameWindow.getBoardPane().getSelectedPiece().getColor() == piece.getColor()) {
-                    GameWindow.getBoardPane().getSelectedPiece().resetAvailablePositions();
-                    GameWindow.getBoardPane().setSelectedPiece(piece);
-                    GameWindow.getBoardPane().getSelectedPiece().calculateAvailablePositions(GameWindow.getBoardPane());
+                else if (selectedPiece.getColor() == piece.getColor()) {
+                    selectedPiece.resetAvailablePositions();
+                    selectedPiece = piece;
+                    selectedPiece.calculateAvailablePositions(GameWindow.getBoardPane());
                     /* for each available position that doesn't lead to check, enable action listener and set border to green */
-                    GameWindow.getBoardPane()
-                            .getSelectedPiece()
+                    selectedPiece
                             .getAvailablePositions()
                             .stream()
-                            .filter(avPos -> GameWindow.getBoardPane().getSelectedPiece().tryMove(GameWindow.getBoardPane(), avPos))
+                            .filter(avPos -> piece.tryMove(GameWindow.getBoardPane(), avPos))
                             .forEach(avPos -> {
                                 avPos.setBorder(new LineBorder(Color.GREEN, 4));
                                 if (avPos.getActionListeners().length == 0) {
@@ -88,15 +89,16 @@ public class Position extends JButton implements ActionListener {
         }
         /* if position that is clicked doesn't have piece on it and selected piece can move on that position */
         else {
-            if (GameWindow.getBoardPane().getSelectedPiece() != null) {
-                if (GameWindow.getBoardPane().getSelectedPiece().getAvailablePositions().contains(this) && GameWindow.getBoardPane().getSelectedPiece().tryMove(GameWindow.getBoardPane(),this)) {
-                    Position source = GameWindow.getBoardPane().getSelectedPiece().getPosition();
-                    GameWindow.getBoardPane().getSelectedPiece().move(this);
-                    GameWindow.getHistoryPane().pushMoveToHistory(GameWindow.getBoardPane().getSelectedPiece(), source, this);
+            if (selectedPiece != null) {
+                if (selectedPiece.getAvailablePositions().contains(this)
+                        && selectedPiece.tryMove(GameWindow.getBoardPane(),this)) {
+                    Position source = selectedPiece.getPosition();
+                    selectedPiece.move(this);
+                    GameWindow.getHistoryPane().pushMoveToHistory(selectedPiece, source, this);
                     Client.makeMove(source, this);
                 }
-                GameWindow.getBoardPane().getSelectedPiece().resetAvailablePositions();
-                GameWindow.getBoardPane().setSelectedPiece(null);
+                selectedPiece.resetAvailablePositions();
+                selectedPiece = null;
             }
         }
 

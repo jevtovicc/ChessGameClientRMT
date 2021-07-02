@@ -110,7 +110,7 @@ public class Client {
                     piece.move(destination);
                     GUIController.changeGameWindowTitle(true);
                     GameWindow.getHistoryPane().pushMoveToHistory(piece, source, destination);
-                    GameWindow.getBoardPane().toggleActionListeners(true);
+                    GameWindow.getBoardPane().enableActionListeners();
                     /* if is check */
                     if (GameWindow.getBoardPane().calculateIfInDanger()) {
                         /* check if checkmate */
@@ -173,13 +173,13 @@ public class Client {
         outputToServer.println("InvitationReject@" + sender);
     }
 
-    public static void disconnect() { outputToServer.println("quit@" + opponentUsername); }
+    public static void disconnect() { outputToServer.println("quit"); }
 
     public static void makeMove(Position source, Position destination) {
-        GameWindow.getBoardPane().toggleActionListeners(false);
+        GameWindow.getBoardPane().disableActionListeners();
         GUIController.changeGameWindowTitle(false);
-        // opponentUsername, src-col,src-row,dest-col,dest-row
-        outputToServer.println("MoveMade@" + opponentUsername + "," + source.getColumn() + ","
+        // src-col,src-row,dest-col,dest-row
+        outputToServer.println("MoveMade@" + source.getColumn() + ","
                 + source.getRow() + "," + destination.getColumn() + "," + destination.getRow());
     }
 
